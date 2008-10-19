@@ -11,8 +11,8 @@ import net.ropelato.compactcarrace.graphics3d.Terrain;
 public class Car
 {
     Model model = null;
-    float length = 2f;
-    float width = 1.5f;
+    float length = 2.5f;
+    float width = 2f;
 
     float smoothMoves = 10f;
     float targetX = 0f;
@@ -118,20 +118,22 @@ public class Car
             return;
         }
 
-        
+        float xLength = this.getWidth() * (float) Math.cos(Math.toRadians(rotationY)) + this.getLength() * (float) Math.sin(Math.toRadians(rotationY));
+        float zLength = this.getLength() * (float) Math.cos(Math.toRadians(rotationY)) + this.getWidth() * (float) Math.sin(Math.toRadians(rotationY));
+
         float frontX = this.getPositionX();
-        float frontZ = this.getPositionZ() - this.getLength() / 2;
+        float frontZ = this.getPositionZ() - zLength / 2;
         float frontY = terrain.getPositionY(frontX, frontZ);
 
         float tailX = this.getPositionX();
-        float tailZ = this.getPositionZ() + this.getLength() / 2;
+        float tailZ = this.getPositionZ() + zLength / 2;
         float tailY = terrain.getPositionY(tailX, tailZ);
 
-        float leftX = this.getPositionX() - this.getWidth() / 2;
+        float leftX = this.getPositionX() - xLength / 2;
         float leftZ = this.getPositionZ();
         float leftY = terrain.getPositionY(leftX, leftZ);
 
-        float rightX = this.getPositionX() + this.getWidth() / 2;
+        float rightX = this.getPositionX() + xLength / 2;
         float rightZ = this.getPositionZ();
         float rightY = terrain.getPositionY(rightX, rightZ);
 
@@ -139,12 +141,11 @@ public class Car
         float centerZ = this.getPositionZ();
         float centerY = Math.max((leftY + rightY) / 2, terrain.getPositionY(centerX, centerZ));
 
-        float rotationX = (float) Math.toDegrees(Math.atan((frontY - tailY) / this.getLength()));// * (float) Math.cos(Math.toRadians(rotationY));
-        float rotationZ = (float) Math.toDegrees(Math.atan((rightY - leftY) / this.getWidth()));// * (float) Math.cos(Math.toRadians(rotationY));
-
-        setRotation(rotationX, rotationY, rotationZ);
+        float rotationX = (float) Math.toDegrees(Math.atan((frontY - tailY) / zLength));
+        float rotationZ = (float) Math.toDegrees(Math.atan((rightY - leftY) / xLength));
 
         this.setPositionY(centerY);
+        setRotation(rotationX, rotationY, rotationZ);
     }
 
     public float getRotationX()
