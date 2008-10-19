@@ -20,17 +20,29 @@ import com.sun.j3d.loaders.Scene;
 public class Model extends BranchGroup
 {
     TransformGroup transformGroup = null;
+
     Transform3D transform3D = null;
+
     Scene scene = null;
+
     ArrayList collidingObjects = new ArrayList();
+
     boolean collision = false;
+
     float rotationX = 0f;
+
     float rotationY = 0f;
+
     float rotationZ = 0f;
+
     float positionX = 0f;
+
     float positionY = 0f;
+
     float positionZ = 0f;
+
     float scale = 0f;
+
     String fileName = "";
 
     public Model()
@@ -105,7 +117,7 @@ public class Model extends BranchGroup
 
         return cloneModel;
     }
-    
+
     public void resetRotation()
     {
         transform3D.set(new AxisAngle4f(0, 0, 0, 0f));
@@ -132,11 +144,11 @@ public class Model extends BranchGroup
         this.rotationX = rotationX;
         this.rotationY = rotationY;
         this.rotationZ = rotationZ;
-        
+
         Transform3D transformX = new Transform3D();
         Transform3D transformY = new Transform3D();
         Transform3D transformZ = new Transform3D();
-        
+
         resetRotation();
 
         transformX.rotX(Math.toRadians(rotationX));
@@ -167,7 +179,7 @@ public class Model extends BranchGroup
         this.positionX = positionX;
         this.positionY = positionY;
         this.positionZ = positionZ;
-        
+
         transform3D.setTranslation(new Vector3d(positionX, positionY, positionZ));
     }
 
@@ -254,7 +266,7 @@ public class Model extends BranchGroup
     {
         this.transform3D = transform3D;
     }
-    
+
     public void setFileName(String fileName)
     {
         this.fileName = fileName;
