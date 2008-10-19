@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+
+<world>
+	<light>
+		<ambientlight>
+			<color red="20" green="20" blue="20"/>
+			<bounds x="0" y="0" z="0" radius="10000"/>
+		</ambientlight>
+		<pointlight>
+			<color red="255" green="255" blue="255"/>
+			<position x="1000" y="1000" z="1000"/>
+			<bounds x="0" y="0" z="0" radius="10000"/>
+		</pointlight>
+		<pointlight>
+			<color red="255" green="255" blue="255"/>
+			<position x="-1000" y="5" z="-1000"/>
+			<bounds x="0" y="0" z="0" radius="10000"/>
+		</pointlight>
+	</light>
+	<textures>
+		<texture src="world/data/textures/wall1.jpg"/>
+		<texture src="world/data/textures/lawn1.jpg"/>
+	</textures>
+	<terrains>
+		<terrain collidable="false">
+			<fields x="20" z="20"/>
+			<position x="-30" y="0" z="-30"/>
+			<scale x="3" y="1" z="3"/>
+			<texture src="world/data/textures/lawn1.jpg" x="6" z="6"/>
+			<transparency visible="1"/>
+			<randomize x="0-20" z="0-20" height="0.0-0.5" seed="0"/>
+			<set x="0-20" z="20" height="0"/>
+		</terrain>
+		
+		<terrain collidable="true">
+			<fields x="5" z="1"/>
+			<position x="-30" y="0" z="24"/>
+			<scale x="12" y="1" z="12"/>
+			<texture src="world/data/textures/rock1.jpg" x="16" z="16"/>
+			<transparency visible="1"/>
+			<randomize x="0-5" z="1" height="4-12" seed="0"/>
+		</terrain>
+		<terrain collidable="true">
+			<fields x="5" z="1"/>
+			<position x="-30" y="0" z="-36"/>
+			<scale x="12" y="1" z="12"/>
+			<texture src="world/data/textures/rock1.jpg" x="16" z="16"/>
+			<transparency visible="1"/>
+			<randomize x="0-5" z="0" height="4-12" seed="1"/>
+		</terrain>
+		<terrain collidable="true">
+			<fields x="1" z="5"/>
+			<position x="-36" y="0" z="-30"/>
+			<scale x="12" y="1" z="12"/>
+			<texture src="world/data/textures/rock1.jpg" x="16" z="16"/>
+			<transparency visible="1"/>
+			<randomize x="0" z="0-5" height="4-12" seed="2"/>
+		</terrain>
+		<terrain collidable="true">
+			<fields x="1" z="5"/>
+			<position x="24" y="0" z="-30"/>
+			<scale x="12" y="1" z="12"/>
+			<texture src="world/data/textures/rock1.jpg" x="16" z="16"/>
+			<transparency visible="1"/>
+			<randomize x="1" z="0-5" height="4-12" seed="3"/>
+		</terrain>
+	</terrains>
+	<models>
+		<!--
+		<model src="world/data/floor1_walls.ms3d" collidable="true">
+			<position x="0" y="0" z="0"/>
+			<scale factor="0.1"/>
+			<rotation x="0" y="0" z="0"/>
+		</model>
+		-->
+		
+		<model src="world/data/tree1.ms3d" collidable="true">
+			<position x="5" y="0" z="0"/>
+			<scale factor="0.1"/>
+			<rotation x="0" y="0" z="0"/>
+		</model>
+		
+		<model src="world/data/tree1.ms3d" collidable="true">
+			<position x="-5" y="0" z="0"/>
+			<scale factor="0.1"/>
+			<rotation x="0" y="0" z="0"/>
+		</model>
+		
+		<model src="world/data/tree1.ms3d" collidable="false">
+			<position x="0" y="0" z="0"/>
+			<scale factor="0.1"/>
+			<rotation x="0" y="0" z="0"/>
+		</model>
+		
+		<model src="world/data/building1.ms3d" collidable="true">
+			<position x="0" y="0" z="-5"/>
+			<scale factor="0.2"/>
+			<rotation x="0" y="180" z="0"/>
+		</model>
+
+	</models>
+</world>
