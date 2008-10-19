@@ -179,7 +179,6 @@ public class World
         {
             FileDownloader.download(FileDownloader.ROOT_DIR + fileName, fileName);
         }
-
     }
 
     private void parseModel(Element element)

@@ -200,17 +200,17 @@ public class Camera
             }
             if (cameraMode == STATIC)
             {
-            	if(targetModel.getPositionZ() - getPositionZ() != 0f)
-            	{
-	                if (targetModel.getPositionZ() >= positionZ)
-	                {
-	                    setRotationY((float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))) + 180);
-	                }
-	                else
-	                {
-	                    setRotationY((float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))));
-	                }
-            	}
+                if (targetModel.getPositionZ() - getPositionZ() != 0f)
+                {
+                    if (targetModel.getPositionZ() >= positionZ)
+                    {
+                        setRotationY((float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))) + 180);
+                    }
+                    else
+                    {
+                        setRotationY((float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))));
+                    }
+                }
 
                 setPosition(positionX, positionY, positionZ);
             }
@@ -256,13 +256,13 @@ public class Camera
     {
         return transform3D;
     }
-    
+
     public void changeView()
     {
-    	cameraMode++;
-    	if(cameraMode > 2)
-    	{
-    		cameraMode = 0;
-    	}
+        cameraMode++;
+        if (cameraMode > 2)
+        {
+            cameraMode = 0;
+        }
     }
 }

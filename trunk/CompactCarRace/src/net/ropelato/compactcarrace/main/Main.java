@@ -23,10 +23,15 @@ import net.ropelato.compactcarrace.world.World;
 public class Main extends Thread
 {
     View view = null;
+
     ChatReport chatReport = null;
+
     Car myCar = null;
+
     Controller controller = null;
+
     World world = null;
+
     int delay = 15;
 
     public static JFrame frame = null;
@@ -88,6 +93,7 @@ public class Main extends Thread
         // create cars
         Model myCarModel = new Model("./cars/minicooper/minicooper1.ms3d");
         // Model myCarModel = new Model("./cars/vespa/vespa01b.ms3d");
+        // Model myCarModel = new Model("./cars/mazda/mazda.ms3d");
         myCar = new Car(myCarModel);
         myCar.getModel().setCollidable(true);
         view.addBranchGroup(myCar.getModel());
