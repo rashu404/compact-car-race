@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<world>
+	<light>
+		<ambientlight>
+			<color red="20" green="20" blue="20"/>
+			<bounds x="0" y="0" z="0" radius="10000"/>
+		</ambientlight>
+		<pointlight>
+			<color red="180" green="180" blue="180"/>
+			<position x="-1000" y="1000" z="1000"/>
+			<bounds x="0" y="0" z="0" radius="10000"/>
+		</pointlight>
+		<pointlight>
+			<color red="180" green="180" blue="180"/>
+			<position x="1000" y="5" z="1000"/>
+			<bounds x="0" y="0" z="0" radius="10000"/>
+		</pointlight>
+		<pointlight>
+			<color red="180" green="180" blue="180"/>
+			<position x="0" y="1000" z="-1000"/>
+			<bounds x="0" y="0" z="0" radius="10000"/>
+		</pointlight>
+	</light>
+	<textures>
+		<texture src="world/data/textures/pavement1.jpg"/>
+	</textures>
+	<terrains>
+		<terrain collidable="false">
+			<fields x="4" z="4"/>
+			<position x="-25" y="0" z="-25"/>
+			<scale x="20" y="10" z="20"/>
+			<texture src="world/data/textures/pavement1.jpg" x="8" z="8"/>
+			<transparency visible="1"/>
+			<set x="2" z="2" height="1"/>
+			<!--
+			<randomize x="0-50" z="0-50" height="0.0-0.2" seed="0"/>
+			 -->
+		</terrain>
+	</terrains>
+	<models>
+		 <!--
+		 <model src="world/data/tree1.ms3d" collidable="true">
+			<position x="5" y="0" z="0"/>
+			<scale factor="0.1"/>
+			<rotation x="0" y="0" z="0"/>
+		</model>
+		-->
+	</models>
+</world>
