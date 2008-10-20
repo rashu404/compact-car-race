@@ -7,25 +7,38 @@ import net.ropelato.compactcarrace.graphics3d.CollisionEntryDetector;
 import net.ropelato.compactcarrace.graphics3d.CollisionExitDetector;
 import net.ropelato.compactcarrace.graphics3d.Model;
 import net.ropelato.compactcarrace.graphics3d.Terrain;
+import net.ropelato.compactcarrace.world.World;
 
 public class Car
 {
     Model model = null;
+
     float length = 2.5f;
+
     float width = 2f;
 
     float smoothMoves = 10f;
+
     float targetX = 0f;
+
     float targetY = 0f;
+
     float targetZ = 0f;
 
     float speed = 0f;
+
     float maxTurn = 3f;
+
     float maxSpeed = 0.4f;
+
     float minSpeed = -0.3f;
+
     float maxAcceleration = 0.02f;
+
     float maxDeceleration = 0.02f;
+
     float stdDeceleration = 0.01f;
+
     float acceleration = 0f;
 
     public Car(Model model)
@@ -103,45 +116,63 @@ public class Car
         model.setRotation(rotationX, rotationY, rotationZ);
     }
 
-    public void adaptToTerrain(Terrain terrain)
+    public void adaptToTerrain(World world)
     {
+        Terrain activeTerrain;
+
         float rotationY = getRotationY();
-
-        if (terrain == null)
-        {
-            this.setPositionY(0f);
-
-            this.setRotationX(0f);
-            this.setRotationY(rotationY);
-            this.setRotationZ(0f);
-
-            return;
-        }
 
         float xLength = this.getWidth() * (float) Math.cos(Math.toRadians(rotationY)) + this.getLength() * (float) Math.sin(Math.toRadians(rotationY));
         float zLength = this.getLength() * (float) Math.cos(Math.toRadians(rotationY)) + this.getWidth() * (float) Math.sin(Math.toRadians(rotationY));
 
         float frontX = this.getPositionX();
         float frontZ = this.getPositionZ() - zLength / 2;
-        float frontY = terrain.getPositionY(frontX, frontZ);
+        float frontY = 0f;
+        activeTerrain = world.getActiveTerrain(frontX, frontZ);
+        if (activeTerrain != null)
+        {
+            frontY = activeTerrain.getPositionY(frontX, frontZ);
+        }
 
-        float tailX = this.getPositionX();
-        float tailZ = this.getPositionZ() + zLength / 2;
-        float tailY = terrain.getPositionY(tailX, tailZ);
+        float backX = this.getPositionX();
+        float backZ = this.getPositionZ() + zLength / 2;
+        float backY = 0f;
+        activeTerrain = world.getActiveTerrain(backX, backZ);
+        if (activeTerrain != null)
+        {
+            backY = activeTerrain.getPositionY(backX, backZ);
+        }
 
         float leftX = this.getPositionX() - xLength / 2;
         float leftZ = this.getPositionZ();
-        float leftY = terrain.getPositionY(leftX, leftZ);
+        float leftY = 0f;
+        activeTerrain = world.getActiveTerrain(leftX, leftZ);
+        if (activeTerrain != null)
+        {
+            leftY = activeTerrain.getPositionY(leftX, leftZ);
+        }
 
         float rightX = this.getPositionX() + xLength / 2;
         float rightZ = this.getPositionZ();
-        float rightY = terrain.getPositionY(rightX, rightZ);
+        float rightY = 0f;
+        activeTerrain = world.getActiveTerrain(rightX, rightZ);
+        if (activeTerrain != null)
+        {
+            rightY = activeTerrain.getPositionY(rightX, rightZ);
+        }
 
         float centerX = this.getPositionX();
         float centerZ = this.getPositionZ();
-        float centerY = Math.max((leftY + rightY) / 2, terrain.getPositionY(centerX, centerZ));
+        float centerY = 0f;
+        activeTerrain = world.getActiveTerrain(centerX, centerZ);
+        if (activeTerrain != null)
+        {
+            centerY = activeTerrain.getPositionY(centerX, centerZ);
+        }
 
-        float rotationX = (float) Math.toDegrees(Math.atan((frontY - tailY) / zLength));
+        centerY = Math.max(centerY, (leftY + rightY) / 2);
+
+        float rotationX = (float) Math.toDegrees(Math.atan((frontY - backY) / zLength));
         float rotationZ = (float) Math.toDegrees(Math.atan((rightY - leftY) / xLength));
 
         this.setPositionY(centerY);

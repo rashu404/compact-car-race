@@ -26,9 +26,13 @@ import org.jdom.input.SAXBuilder;
 public class World
 {
     private ArrayList models = new ArrayList();
+
     private AmbientLight ambientLight = new AmbientLight();
+
     private BranchGroup ambientLightBG = new BranchGroup();
+
     private ArrayList pointLights = new ArrayList();
+
     private ArrayList terrains = new ArrayList();
 
     public World(String fileName)
@@ -187,12 +191,40 @@ public class World
         {
             String fileName = element.getAttribute("src").getValue();
             boolean collidable = true;
-            if(element.getAttribute("collidable")!=null)
+            if (element.getAttribute("collidable") != null)
                 collidable = element.getAttribute("collidable").getBooleanValue();
 
             float positionX = position.getAttribute("x").getFloatValue();
-            float positionY = position.getAttribute("y").getFloatValue();
             float positionZ = position.getAttribute("z").getFloatValue();
+            float positionY = 0f;
+
+            String yString = position.getAttribute("y").getValue();
+            yString = yString.replace(" ", "");
+            if (yString != null && yString.contains("terrain"))
+            {
+                float yDifference = 0f;
+
+                if (yString.contains("+"))
+                {
+                    int plusPosition = yString.indexOf("+");
+                    yDifference = new Float(yString.substring(plusPosition + 1, yString.length())).floatValue();
+                }
+                else if (yString.contains("-"))
+                {
+                    int minusPosition = yString.indexOf("-");
+                    yDifference = new Float(yString.substring(minusPosition + 1, yString.length())).floatValue() * -1;
+                }
+
+                Terrain activeTerrain = getActiveTerrain(positionX, positionZ);
+                if (activeTerrain != null)
+                {
+                    positionY = activeTerrain.getPositionY(positionX, positionZ)+yDifference;
+                }
+            }
+            else
+            {
+                positionY = position.getAttribute("y").getFloatValue();
+            }
 
             float scaleFactor = scale.getAttribute("factor").getFloatValue();
 
@@ -241,7 +273,7 @@ public class World
 
     private void parseTerrain(Element element)
     {
-        
+
         Element fields = element.getChild("fields");
         Element position = element.getChild("position");
         Element scale = element.getChild("scale");
@@ -252,9 +284,9 @@ public class World
         try
         {
             boolean collidable = false;
-            if(element.getAttribute("collidable")!=null)
+            if (element.getAttribute("collidable") != null)
                 collidable = element.getAttribute("collidable").getBooleanValue();
-            
+
             int fieldsX = fields.getAttribute("x").getIntValue();
             int fieldsZ = fields.getAttribute("z").getIntValue();
 
@@ -450,7 +482,7 @@ public class World
     {
         return terrains;
     }
-    
+
     public Terrain getActiveTerrain(float xPosition, float zPosition)
     {
         Terrain activeTerrain = null;

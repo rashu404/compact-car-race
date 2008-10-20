@@ -112,6 +112,9 @@ public class Main extends Thread
         frame.setVisible(true);
         view.getCanvas3D().requestFocus();
 
+        
+        myCar.setPosition(0, 0, -5f);
+        myCar.setRotation(0f, 0f, 0f);
         myCar.update();
         myCar.getModel().setCollision(false);
 
@@ -141,9 +144,7 @@ public class Main extends Thread
                 myCar.resetCollision();
             }
 
-            Terrain activeTerrain = world.getActiveTerrain(myCar.getPositionX(), myCar.getPositionZ());
-
-            myCar.adaptToTerrain(activeTerrain);
+            myCar.adaptToTerrain(world);
 
             // change camera view
             if (controller.getCommand("changeCamera") == 1)
