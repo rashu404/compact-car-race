@@ -22,43 +22,31 @@ import com.sun.j3d.utils.image.TextureLoader;
 public class Terrain extends BranchGroup
 {
     int xFields = 0;
-
     int zFields = 0;
 
     Point3f[] points = null;
-
     Shape3D shape3D = null;
 
     float xMove = 0f;
-
     float yMove = 0f;
-
     float zMove = 0f;
 
     float xScale = 1f;
-
     float yScale = 1f;
-
     float zScale = 1f;
 
     float xMin = 0f;
-
     float xMax = 0f;
-
     float zMin = 0f;
-
     float zMax = 0f;
 
     Color3f color = null;
-
     String textureFileName = null;
-
     float visible = 1f;
-
-    float textureScaleX = 1f;
-
-    float textureScaleZ = 1f;
     
+    float textureScaleX = 1f;
+    float textureScaleZ = 1f;
+
     public Terrain(int xFields, int zFields, float xMove, float yMove, float zMove, float xScale, float yScale, float zScale)
     {
         this.xFields = xFields;
@@ -173,8 +161,6 @@ public class Terrain extends BranchGroup
             tg.setGenMode(TexCoordGeneration.TEXTURE_COORDINATE_3);
             tg.setPlaneS(new Vector4f((1f / textureScaleX), 0f, 0f, 0f));
             tg.setPlaneT(new Vector4f(0f, 0f, (1f / textureScaleZ), 0f));
-            // tg.setPlaneT(new Vector4f(0f, (1f/textureScaleY),
-            // (1f/textureScaleZ), 0f));
 
             appearance.setTexCoordGeneration(tg);
             appearance.setTexture(texImage);
