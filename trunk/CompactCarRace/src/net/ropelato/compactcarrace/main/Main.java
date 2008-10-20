@@ -23,17 +23,11 @@ import net.ropelato.compactcarrace.world.World;
 public class Main extends Thread
 {
     View view = null;
-
     ChatReport chatReport = null;
-
     Car myCar = null;
-
     Controller controller = null;
-
     World world = null;
-
     int delay = 15;
-
     public static JFrame frame = null;
 
     private Main()
