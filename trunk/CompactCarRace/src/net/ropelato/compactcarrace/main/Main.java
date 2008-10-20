@@ -23,7 +23,6 @@ import net.ropelato.compactcarrace.world.World;
 public class Main extends Thread
 {
     View view = null;
-    ChatReport chatReport = null;
     Car myCar = null;
     Controller controller = null;
     World world = null;
@@ -49,9 +48,6 @@ public class Main extends Thread
         view.getCanvas3D().setVisible(false);
         frame.getContentPane().add(view.getCanvas3D(), BorderLayout.CENTER);
         view.getCanvas3D().addKeyListener(new CanvasKeyListener());
-
-        // create chat report
-        chatReport = new ChatReport();
 
         // show frame
         frame.setVisible(true);
