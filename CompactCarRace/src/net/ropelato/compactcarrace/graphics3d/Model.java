@@ -121,7 +121,8 @@ public class Model extends BranchGroup
     public void resetRotation()
     {
         transform3D.set(new AxisAngle4f(0, 0, 0, 0f));
-        transform3D.setScale(scale);
+        setScale(scale);
+        setPosition(positionX, positionY, positionZ);
     }
 
     public void setRotationX(float rotationX)
