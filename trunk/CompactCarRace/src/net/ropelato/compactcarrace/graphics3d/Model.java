@@ -3,6 +3,7 @@ package net.ropelato.compactcarrace.graphics3d;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Observable;
 
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Node;
@@ -11,6 +12,7 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Vector3d;
 
+import net.ropelato.compactcarrace.util.MyObservable;
 import net.ropelato.compactcarrace.util.Util;
 
 import com.glyphein.j3d.loaders.milkshape.MS3DLoader;
@@ -20,30 +22,25 @@ import com.sun.j3d.loaders.Scene;
 public class Model extends BranchGroup
 {
     TransformGroup transformGroup = null;
-
     Transform3D transform3D = null;
-
     Scene scene = null;
 
     ArrayList collidingObjects = new ArrayList();
-
     boolean collision = false;
+    boolean autoUpdate = true;
 
     float rotationX = 0f;
-
     float rotationY = 0f;
-
     float rotationZ = 0f;
-
     float positionX = 0f;
-
     float positionY = 0f;
-
     float positionZ = 0f;
 
     float scale = 0f;
 
     String fileName = "";
+
+    MyObservable observable = new MyObservable();
 
     public Model()
     {
@@ -150,7 +147,9 @@ public class Model extends BranchGroup
         Transform3D transformY = new Transform3D();
         Transform3D transformZ = new Transform3D();
 
+        setAutoUpdate(false);
         resetRotation();
+        setAutoUpdate(true);
 
         transformX.rotX(Math.toRadians(rotationX));
         transform3D.mul(transformX);
@@ -158,6 +157,10 @@ public class Model extends BranchGroup
         transform3D.mul(transformZ);
         transformY.rotY(Math.toRadians(rotationY));
         transform3D.mul(transformY);
+
+        /*
+         * if (autoUpdate) { update(); }
+         */
     }
 
     public void setPositionX(float positionX)
@@ -182,6 +185,9 @@ public class Model extends BranchGroup
         this.positionZ = positionZ;
 
         transform3D.setTranslation(new Vector3d(positionX, positionY, positionZ));
+        /*
+         * if (autoUpdate) { update(); }
+         */
     }
 
     public void setScale(float scale)
@@ -279,6 +285,9 @@ public class Model extends BranchGroup
         rotationY = Util.modifyAngle(rotationY);
         rotationZ = Util.modifyAngle(rotationZ);
         transformGroup.setTransform(transform3D);
+
+        observable.update();
+        System.out.println("notifying");
     }
 
     public TransformGroup getTransformGroup()
@@ -299,5 +308,20 @@ public class Model extends BranchGroup
     public void setCollidingObjects(ArrayList collidingObjects)
     {
         this.collidingObjects = collidingObjects;
+    }
+
+    public boolean isAutoUpdate()
+    {
+        return autoUpdate;
+    }
+
+    public void setAutoUpdate(boolean autoUpdate)
+    {
+        this.autoUpdate = autoUpdate;
+    }
+
+    public Observable getObservable()
+    {
+        return observable;
     }
 }

@@ -25,7 +25,7 @@ public class Main extends Thread
     Car myCar = null;
     Controller controller = null;
     World world = null;
-    int delay = 15;
+    int delay = 50;
     public static JFrame frame = null;
 
     private Main()
@@ -111,11 +111,18 @@ public class Main extends Thread
         frame.setVisible(true);
         view.getCanvas3D().requestFocus();
 
-        
         myCar.setPosition(0, 0, -5f);
         myCar.setRotation(0f, 0f, 0f);
         myCar.update();
         myCar.getModel().setCollision(false);
+
+        view.getCamera().setTargetModel(myCar.getModel());
+
+        view.getCanvas3D().setDoubleBufferEnable(false);
+        
+        view.getCanvas3D().getGraphicsContext3D().setFrontBufferRendering(true);
+        
+        myCar.getModel().getObservable().addObserver(view.getCamera());
 
         Util.startFPSCounter();
 
@@ -148,16 +155,13 @@ public class Main extends Thread
             // change camera view
             if (controller.getCommand("changeCamera") == 1)
             {
-                
                 view.getCamera().changeView();
             }
 
-            view.getCamera().setTargetModel(myCar.getModel());
-            view.getCamera().update(true);
-
+            myCar.update();
+            //view.getCamera().update(true);
             view.getCanvas3D().getGraphicsContext3D().flush(true);
             Util.delay(delay);
-            myCar.update();
 
             // System.out.println(Util.getFPSAveraage());
         }

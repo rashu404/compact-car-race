@@ -12,13 +12,9 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 
 public class View
 {
-
     Canvas3D canvas3D = null;
-
     GraphicsConfiguration graphicsConfiguration = null;
-
     SimpleUniverse universe = null;
-
     Camera camera = null;
 
     public View()
@@ -40,7 +36,7 @@ public class View
         // *** create camera ***
         TransformGroup cameraTransformGroup = universe.getViewingPlatform().getMultiTransformGroup().getTransformGroup(0);
         camera = new Camera(cameraTransformGroup);
-
+        
         canvas3D.startRenderer();
     }
 
