@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 
 import net.ropelato.compactcarrace.cars.Car;
 import net.ropelato.compactcarrace.controls.Controller;
-import net.ropelato.compactcarrace.graphics2d.ChatReport;
 import net.ropelato.compactcarrace.graphics3d.Camera;
 import net.ropelato.compactcarrace.graphics3d.Model;
 import net.ropelato.compactcarrace.graphics3d.MyPointLight;
@@ -149,6 +148,7 @@ public class Main extends Thread
             // change camera view
             if (controller.getCommand("changeCamera") == 1)
             {
+                
                 view.getCamera().changeView();
             }
 
