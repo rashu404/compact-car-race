@@ -1,47 +1,35 @@
 package net.ropelato.compactcarrace.graphics3d;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Vector3d;
 
-public class Camera
+public class Camera implements Observer
 {
     TransformGroup transformGroup = null;
-
     Transform3D transform3D = null;
 
     float rotationX = 0f;
-
     float rotationY = 0f;
-
     float rotationZ = 0f;
-
     float positionX = 0f;
-
     float positionY = 0f;
-
     float positionZ = 0f;
 
     int cameraMode = 0;
-
     Model targetModel = null;
-
     float cameraDistance = 10f;
-
     float cameraSpeed = 0f;
-
     float cameraHeight = 2f;
-
     float distance = 0f;
 
     float higherThanTargetModel = 1.5f;
-
-    boolean updateReady = false;
-
+    
     public static int STATIC = 0;
-
     public static int THIRD_PERSON = 1;
-
     public static int FIRST_PERSON = 2;
 
     public Camera(TransformGroup transformGroup)
@@ -131,21 +119,10 @@ public class Camera
         this.cameraMode = cameraMode;
     }
 
-    public void setUpdateReady(boolean updateReady)
-    {
-        this.updateReady = updateReady;
-    }
-
-    public boolean getUpdateReady()
-    {
-        return updateReady;
-    }
-
     public void update(boolean soft)
     {
         updateCameraPosition(soft);
         transformGroup.setTransform(transform3D);
-        updateReady = true;
     }
 
     private void updateCameraPosition(boolean soft)
@@ -174,10 +151,13 @@ public class Camera
                 }
 
                 if (soft)
+                {
                     setRotationY((getRotationY() * 10 + targetModel.getRotationY()) / 11);
+                }
                 else
+                {
                     setRotationY(targetModel.getRotationY());
-
+                }
                 distance = (float) Math.sqrt(((targetModel.getPositionX() - positionX) * (targetModel.getPositionX() - positionX)) + ((targetModel.getPositionZ() - positionZ) * (targetModel.getPositionZ() - positionZ)));
                 cameraSpeed = -1 * cameraDistance;
 
@@ -264,5 +244,11 @@ public class Camera
         {
             cameraMode = 0;
         }
+    }
+
+    public void update(Observable o, Object arg)
+    {
+        System.out.println("update");
+        update(false);
     }
 }
