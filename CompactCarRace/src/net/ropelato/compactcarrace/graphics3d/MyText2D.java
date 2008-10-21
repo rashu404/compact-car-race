@@ -19,23 +19,15 @@ import com.sun.j3d.utils.geometry.Text2D;
 public class MyText2D extends BranchGroup
 {
     TransformGroup transformGroup;
-
     Transform3D transform3D = new Transform3D();
-
     PointLight pointLight;
-
     BoundingSphere bounds;
 
     float rotationX = 0f;
-
     float rotationY = 0f;
-
     float rotationZ = 0f;
-
     float positionX = 0f;
-
     float positionY = 0f;
-
     float positionZ = 0f;
 
     float scale = 1f;
@@ -47,12 +39,7 @@ public class MyText2D extends BranchGroup
         material.setEmissiveColor(new Color3f(color));
         appearance.setMaterial(material);
 
-        /*Font3D font3D = new Font3D(new Font(font, style, size), new FontExtrusion());
-        Text3D textGeom = new Text3D(font3D, new String(text));
-        textGeom.setAlignment(Text3D.ALIGN_CENTER);*/
-        
         Text2D text2D = new Text2D(text, new Color3f(color), font, size, style);
-        //text2D.setAppearance(appearance);
 
         transformGroup = new TransformGroup(transform3D);
         transformGroup.addChild(text2D);

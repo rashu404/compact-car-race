@@ -24,23 +24,15 @@ import net.ropelato.compactcarrace.util.Util;
 public class MyText3D extends BranchGroup
 {
     TransformGroup transformGroup;
-
     Transform3D transform3D = new Transform3D();
-
     PointLight pointLight;
-
     BoundingSphere bounds;
 
     float rotationX = 0f;
-
     float rotationY = 0f;
-
     float rotationZ = 0f;
-
     float positionX = 0f;
-
     float positionY = 0f;
-
     float positionZ = 0f;
 
     float scale = 1f;
