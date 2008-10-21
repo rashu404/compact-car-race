@@ -1,6 +1,6 @@
 @echo off
 
-echo Starting Compact Car Race - Please wait...
+echo Starting Compact Car Race - please wait...
 
 set mainclass=net.ropelato.compactcarrace.main.Main
 
