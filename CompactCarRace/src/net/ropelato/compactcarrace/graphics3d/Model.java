@@ -40,7 +40,7 @@ public class Model extends BranchGroup
 
     String fileName = "";
 
-    MyObservable observable = new MyObservable();
+    //MyObservable observable = new MyObservable();
 
     public Model()
     {
@@ -298,7 +298,7 @@ public class Model extends BranchGroup
         rotationZ = Util.modifyAngle(rotationZ);
         transformGroup.setTransform(transform3D);
 
-        observable.update();
+        //observable.update();
         System.out.println("notifying");
     }
 
@@ -332,8 +332,8 @@ public class Model extends BranchGroup
         this.autoUpdate = autoUpdate;
     }
 
-    public Observable getObservable()
+    /*public Observable getObservable()
     {
         return observable;
-    }
+    }*/
 }

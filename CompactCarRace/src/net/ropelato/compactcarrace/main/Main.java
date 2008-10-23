@@ -120,7 +120,7 @@ public class Main extends Thread
         view.getCanvas3D().setDoubleBufferEnable(true);
 
         // define camera as observer for car model
-        myCar.getModel().getObservable().addObserver(view.getCamera());
+        //myCar.getModel().getObservable().addObserver(view.getCamera());
 
         Util.startFPSCounter();
 
@@ -156,12 +156,12 @@ public class Main extends Thread
                 view.getCamera().changeView();
             }
 
-            // view.getCamera().update(true);
-            // view.getCanvas3D().getGraphicsContext3D().flush(false);
+            view.getCamera().update(true);
+            view.getCanvas3D().getGraphicsContext3D().flush(false);
             Util.delay(delay);
             myCar.update();
 
-            // System.out.println(Util.getFPSAveraage());
+            System.out.println(Util.getFPSAveraage());
         }
     }
 
