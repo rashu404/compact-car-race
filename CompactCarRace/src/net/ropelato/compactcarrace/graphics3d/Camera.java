@@ -166,6 +166,8 @@ public class Camera implements Observer
                 positionY = targetModel.getPositionY() + cameraHeight;
 
                 setPosition(positionX, positionY, positionZ);
+                
+                System.out.println(cameraSpeed);
             }
             if (cameraMode == FIRST_PERSON)
             {
@@ -249,6 +251,6 @@ public class Camera implements Observer
     public void update(Observable o, Object arg)
     {
         System.out.println("update");
-        update(false);
+        update(true);
     }
 }
