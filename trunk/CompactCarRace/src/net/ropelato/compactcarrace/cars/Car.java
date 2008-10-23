@@ -12,33 +12,19 @@ import net.ropelato.compactcarrace.world.World;
 public class Car
 {
     Model model = null;
-
     float length = 2.5f;
-
     float width = 2f;
-
     float smoothMoves = 10f;
-
     float targetX = 0f;
-
     float targetY = 0f;
-
     float targetZ = 0f;
-
     float speed = 0f;
-
     float maxTurn = 3f;
-
     float maxSpeed = 0.4f;
-
     float minSpeed = -0.3f;
-
     float maxAcceleration = 0.02f;
-
     float maxDeceleration = 0.02f;
-
     float stdDeceleration = 0.01f;
-
     float acceleration = 0f;
 
     public Car(Model model)
