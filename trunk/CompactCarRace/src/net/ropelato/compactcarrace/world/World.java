@@ -26,13 +26,9 @@ import org.jdom.input.SAXBuilder;
 public class World
 {
     private ArrayList models = new ArrayList();
-
     private AmbientLight ambientLight = new AmbientLight();
-
     private BranchGroup ambientLightBG = new BranchGroup();
-
     private ArrayList pointLights = new ArrayList();
-
     private ArrayList terrains = new ArrayList();
 
     public World(String fileName)
@@ -218,7 +214,7 @@ public class World
                 Terrain activeTerrain = getActiveTerrain(positionX, positionZ);
                 if (activeTerrain != null)
                 {
-                    positionY = activeTerrain.getPositionY(positionX, positionZ)+yDifference;
+                    positionY = activeTerrain.getPositionY(positionX, positionZ) + yDifference;
                 }
             }
             else

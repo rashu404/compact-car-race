@@ -225,8 +225,8 @@ public class Car
             }
         }
 
-            System.out.println("move");
-            this.move(speed);
+        System.out.println("move");
+        this.move(speed);
 
         model.update();
     }

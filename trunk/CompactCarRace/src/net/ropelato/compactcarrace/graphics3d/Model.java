@@ -27,7 +27,7 @@ public class Model extends BranchGroup
 
     ArrayList collidingObjects = new ArrayList();
     boolean collision = false;
-    boolean autoUpdate = true;
+    boolean autoUpdate = false;
 
     float rotationX = 0f;
     float rotationY = 0f;
@@ -147,9 +147,16 @@ public class Model extends BranchGroup
         Transform3D transformY = new Transform3D();
         Transform3D transformZ = new Transform3D();
 
-        setAutoUpdate(false);
-        resetRotation();
-        setAutoUpdate(true);
+        if (autoUpdate)
+        {
+            setAutoUpdate(false);
+            resetRotation();
+            setAutoUpdate(true);
+        }
+        else
+        {
+            resetRotation();
+        }
 
         transformX.rotX(Math.toRadians(rotationX));
         transform3D.mul(transformX);
@@ -158,9 +165,11 @@ public class Model extends BranchGroup
         transformY.rotY(Math.toRadians(rotationY));
         transform3D.mul(transformY);
 
-        /*
-         * if (autoUpdate) { update(); }
-         */
+        if (autoUpdate)
+        {
+            update();
+        }
+
     }
 
     public void setPositionX(float positionX)
@@ -185,9 +194,12 @@ public class Model extends BranchGroup
         this.positionZ = positionZ;
 
         transform3D.setTranslation(new Vector3d(positionX, positionY, positionZ));
-        /*
-         * if (autoUpdate) { update(); }
-         */
+
+        if (autoUpdate)
+        {
+            update();
+        }
+
     }
 
     public void setScale(float scale)
