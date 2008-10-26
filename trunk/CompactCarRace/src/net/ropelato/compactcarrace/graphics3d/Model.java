@@ -3,7 +3,6 @@ package net.ropelato.compactcarrace.graphics3d;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Observable;
 
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Node;
@@ -12,7 +11,6 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Vector3d;
 
-import net.ropelato.compactcarrace.util.MyObservable;
 import net.ropelato.compactcarrace.util.Util;
 
 import com.glyphein.j3d.loaders.milkshape.MS3DLoader;
