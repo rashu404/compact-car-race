@@ -25,7 +25,7 @@ public class View
         canvas3D = new Canvas3D(graphicsConfiguration);
         canvas3D.setDoubleBufferEnable(true);
         canvas3D.getGraphicsContext3D().setBufferOverride(false);
-
+        
         // *** create universe ***
         universe = new SimpleUniverse(canvas3D);
         universe.getViewer().getView().setSceneAntialiasingEnable(true);
