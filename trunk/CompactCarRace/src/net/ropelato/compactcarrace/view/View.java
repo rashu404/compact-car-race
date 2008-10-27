@@ -22,7 +22,7 @@ public class View
         // *** set up graphics configuration ***
         // GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
         graphicsConfiguration = SimpleUniverse.getPreferredConfiguration();
-        canvas3D = new Canvas3D(graphicsConfiguration);
+        canvas3D = new MyCanvas3D(graphicsConfiguration);
         canvas3D.setDoubleBufferEnable(true);
         canvas3D.getGraphicsContext3D().setBufferOverride(false);
         

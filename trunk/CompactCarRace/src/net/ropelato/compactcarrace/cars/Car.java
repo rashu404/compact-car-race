@@ -20,14 +20,10 @@ public class Car
     float targetZ = 0f;
     float speed = 0f;
     float maxTurn = 3f;
-    //float maxSpeed = 0.4f;
-    //float minSpeed = -0.3f;
-    float maxSpeed = 1f;
-    float minSpeed = -1f;
-    //float maxAcceleration = 0.02f;
-    //float maxDeceleration = 0.02f;
-    float maxAcceleration = 0.3f;
-    float maxDeceleration = 0.3f;
+    float maxSpeed = 0.4f;
+    float minSpeed = -0.3f;
+    float maxAcceleration = 0.02f;
+    float maxDeceleration = 0.02f;
     float stdDeceleration = 0.01f;
     float acceleration = 0f;
 

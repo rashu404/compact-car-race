@@ -160,27 +160,13 @@ public class Main extends Thread
                 view.getCamera().changeView();
             }
 
-            //Util.delay(delay);
-           
-            
+            Util.delay(delay);
 
             synchronized (this)
             {
-                Util.delay(500);
-                
                 myCar.update();
-                System.out.println("car update "+carUpdate);
-                carUpdate++;
-                
-                Util.delay(500);
                 view.getCamera().update(true);
-                System.out.println("cam update "+camUpdate);
-                camUpdate++;
-                
-                Util.delay(500);
                 view.getCanvas3D().getGraphicsContext3D().flush(true);
-                System.out.println("flush update "+flushUpdate);
-                flushUpdate++;
             }
         }
     }
