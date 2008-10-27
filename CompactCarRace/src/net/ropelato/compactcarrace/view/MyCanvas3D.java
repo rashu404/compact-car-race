@@ -9,5 +9,6 @@ public class MyCanvas3D extends Canvas3D
     public MyCanvas3D(GraphicsConfiguration graphicsConfiguration)
     {
         super(graphicsConfiguration);
+        System.out.println("MyCanvas3D used");
     }
 }
