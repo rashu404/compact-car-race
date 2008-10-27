@@ -295,9 +295,8 @@ public class Model extends BranchGroup
         rotationY = Util.modifyAngle(rotationY);
         rotationZ = Util.modifyAngle(rotationZ);
         transformGroup.setTransform(transform3D);
-
+        
         //observable.update();
-        System.out.println("notifying");
     }
 
     public TransformGroup getTransformGroup()

@@ -155,13 +155,17 @@ public class Main extends Thread
             {
                 view.getCamera().changeView();
             }
+            
+            //Util.delay(delay);
+            Util.delay(60);
 
             view.getCamera().update(true);
-            view.getCanvas3D().getGraphicsContext3D().flush(false);
-            Util.delay(delay);
             myCar.update();
+            view.getCamera().update(true);
 
-            System.out.println(Util.getFPSAveraage());
+            view.getCanvas3D().getGraphicsContext3D().flush(false);
+            
+        
         }
     }
 

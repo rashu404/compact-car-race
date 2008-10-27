@@ -5,6 +5,7 @@ import java.util.Observer;
 
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Vector3d;
 
 public class Camera implements Observer
@@ -27,10 +28,11 @@ public class Camera implements Observer
     float distance = 0f;
 
     float higherThanTargetModel = 1.5f;
-    
+
     public static int STATIC = 0;
     public static int THIRD_PERSON = 1;
     public static int FIRST_PERSON = 2;
+    public static int FOLLOW = 3;
 
     public Camera(TransformGroup transformGroup)
     {
@@ -40,47 +42,44 @@ public class Camera implements Observer
 
     public void setRotationX(float rotationX)
     {
-        Transform3D transformX = new Transform3D();
-        transformX.rotX(Math.toRadians(rotationX - this.rotationX));
-        transform3D.mul(transformX);
-
-        this.rotationX = rotationX;
+        setRotation(rotationX, rotationY, rotationZ);
     }
 
     public void setRotationY(float rotationY)
     {
-        Transform3D transformY = new Transform3D();
-        transformY.rotY(Math.toRadians(rotationY - this.rotationY));
-        transform3D.mul(transformY);
-
-        this.rotationY = rotationY;
+        setRotation(rotationX, rotationY, rotationZ);
     }
 
     public void setRotationZ(float rotationZ)
     {
-        Transform3D transformZ = new Transform3D();
-        transformZ.rotZ(Math.toRadians(rotationZ - this.rotationZ));
-        transform3D.mul(transformZ);
-
-        this.rotationZ = rotationZ;
+        setRotation(rotationX, rotationY, rotationZ);
     }
 
     public void setRotation(float rotationX, float rotationY, float rotationZ)
     {
+        this.rotationX = rotationX;
+        this.rotationY = rotationY;
+        this.rotationZ = rotationZ;
+
         Transform3D transformX = new Transform3D();
         Transform3D transformY = new Transform3D();
         Transform3D transformZ = new Transform3D();
 
-        transformX.rotX(Math.toRadians(rotationX - this.rotationX));
+        resetRotation();
+
+        transformX.rotX(Math.toRadians(rotationX));
         transform3D.mul(transformX);
-        transformY.rotY(Math.toRadians(rotationY - this.rotationY));
+        transformY.rotY(Math.toRadians(rotationY));
         transform3D.mul(transformY);
-        transformZ.rotZ(Math.toRadians(rotationZ - this.rotationZ));
+        transformZ.rotZ(Math.toRadians(rotationZ));
         transform3D.mul(transformZ);
 
-        this.rotationX = rotationX;
-        this.rotationY = rotationY;
-        this.rotationZ = rotationZ;
+    }
+
+    public void resetRotation()
+    {
+        transform3D.set(new AxisAngle4f(0, 0, 0, 0f));
+        setPosition(positionX, positionY, positionZ);
     }
 
     public void setPositionX(float positionX)
@@ -129,6 +128,40 @@ public class Camera implements Observer
     {
         if (targetModel != null)
         {
+            if (cameraMode == FOLLOW)
+            {
+                float distanceX = (targetModel.getPositionX() - positionX);
+                float distanceZ = (targetModel.getPositionZ() - positionZ);
+                float atan = 0f;
+                float targetRotationY = 0f;
+
+                if (distanceZ != 0)
+                {
+                    atan = distanceX / distanceZ;
+                }
+                else
+                {
+                    atan = Float.MAX_VALUE;
+                }
+
+                targetRotationY = (float) Math.toDegrees(Math.atan((targetModel.getPositionX() - positionX) / (targetModel.getPositionZ() - positionZ)));
+
+                if (distanceZ >= 0)
+                {
+                    targetRotationY += 180;
+                }
+
+                setRotationY(targetRotationY);
+
+                distance = (float) Math.sqrt((distanceX * distanceX) + (distanceZ * distanceZ));
+                cameraSpeed = (distance - cameraDistance) / 10f;
+
+                positionX -= (float) Math.sin(Math.toRadians(rotationY)) * cameraSpeed;
+                positionZ -= (float) Math.cos(Math.toRadians(rotationY)) * cameraSpeed;
+                positionY = targetModel.getPositionY() + cameraHeight;
+
+                setPosition(positionX, positionY, positionZ);
+            }
             if (cameraMode == THIRD_PERSON)
             {
                 positionX = targetModel.getPositionX();
@@ -166,8 +199,6 @@ public class Camera implements Observer
                 positionY = targetModel.getPositionY() + cameraHeight;
 
                 setPosition(positionX, positionY, positionZ);
-                
-                System.out.println(cameraSpeed);
             }
             if (cameraMode == FIRST_PERSON)
             {
