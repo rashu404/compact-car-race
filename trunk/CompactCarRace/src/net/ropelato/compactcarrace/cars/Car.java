@@ -25,8 +25,12 @@ public class Car
     float maxAcceleration = 0.005f;
     float maxDeceleration = 0.005f;
     float stdDeceleration = 0.002f;
+    float pitchInfluence = 0.00018f;
     float acceleration = 0f;
+
     float steer = 0f;
+    float pitch = 0f;
+    float roll = 0f;
 
     public Car(Model model)
     {
@@ -109,11 +113,9 @@ public class Car
 
         float rotationY = getRotationY();
 
-        float xLength = this.getWidth() * (float) Math.cos(Math.toRadians(rotationY)) + this.getLength() * (float) Math.sin(Math.toRadians(rotationY));
-        float zLength = this.getLength() * (float) Math.cos(Math.toRadians(rotationY)) + this.getWidth() * (float) Math.sin(Math.toRadians(rotationY));
+        float xLength = this.getWidth() * (float) (Math.cos(Math.toRadians(rotationY)) + 1) * 0.5f + this.getLength() * (float) (Math.sin(Math.toRadians(rotationY)) + 1) * 0.5f;
+        float zLength = this.getLength() * (float) (Math.cos(Math.toRadians(rotationY)) + 1) * 0.5f + this.getWidth() * (float) (Math.sin(Math.toRadians(rotationY)) + 1) * 0.5f;
 
-        System.out.println(xLength+" x "+zLength);
-        
         float frontX = this.getPositionX();
         float frontZ = this.getPositionZ() - zLength / 2;
         float frontY = 0f;
@@ -164,6 +166,9 @@ public class Car
         float rotationX = (float) Math.toDegrees(Math.atan((frontY - backY) / zLength));
         float rotationZ = (float) Math.toDegrees(Math.atan((rightY - leftY) / xLength));
 
+        pitch = rotationX * (float) Math.cos(Math.toRadians(rotationY)) - rotationZ * (float) Math.sin(Math.toRadians(rotationY));
+        roll = -rotationZ * (float) Math.cos(Math.toRadians(rotationY)) - rotationX * (float) Math.sin(Math.toRadians(rotationY));
+
         this.setPositionY(centerY);
         setRotation(rotationX, rotationY, rotationZ);
     }
@@ -185,17 +190,9 @@ public class Car
 
     public void update()
     {
-        if (acceleration != 0f)
+        if ((acceleration > 0 && speed < maxSpeed) || (acceleration < 0 && speed > minSpeed))
         {
             speed += acceleration;
-            if (speed > maxSpeed)
-            {
-                speed = maxSpeed;
-            }
-            if (speed < minSpeed)
-            {
-                speed = minSpeed;
-            }
             acceleration = 0f;
         }
         else
@@ -214,7 +211,9 @@ public class Car
             }
         }
 
-        this.move(speed);
+        speed -= pitch * pitchInfluence;
+
+        this.move((1f - Math.abs(pitch / 90f)) * speed);
         model.update();
     }
 
@@ -332,7 +331,7 @@ public class Car
         this.steer = angle;
         this.turnY(angle * speed / maxSpeed);
     }
-    
+
     public float getLength()
     {
         return length;

@@ -41,10 +41,10 @@
 		</terrain>
 	</terrains>
 	<models>
-		 <model src="world/data/tree1.ms3d" collidable="true">
+		 <!-- <model src="world/data/tree1.ms3d" collidable="true">
 			<position x="-5" y="terrain-0.6" z="-30"/>
 			<scale factor="0.25"/>
 			<rotation x="0" y="0" z="0"/>
-		</model>
+		</model> -->
 	</models>
 </world>
