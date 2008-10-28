@@ -16,6 +16,7 @@ import net.ropelato.compactcarrace.graphics3d.Model;
 import net.ropelato.compactcarrace.graphics3d.MyPointLight;
 import net.ropelato.compactcarrace.graphics3d.Terrain;
 import net.ropelato.compactcarrace.util.Util;
+import net.ropelato.compactcarrace.view.MyCanvas3D;
 import net.ropelato.compactcarrace.view.View;
 import net.ropelato.compactcarrace.world.World;
 
@@ -44,9 +45,10 @@ public class Main extends Thread
 
         // add view to frame
         frame.getContentPane().setBackground(Color.BLACK);
+
         view.getCanvas3D().setVisible(false);
-        frame.getContentPane().add(view.getCanvas3D(), BorderLayout.CENTER);
         view.getCanvas3D().addKeyListener(new CanvasKeyListener());
+        frame.getContentPane().add(view.getCanvas3D(), BorderLayout.CENTER);
 
         // show frame
         frame.setVisible(true);
@@ -94,11 +96,11 @@ public class Main extends Thread
         // define controls
         controller = new Controller(view.getCanvas3D());
 
-        controller.addCommand("turnLeft", Controller.KEYBOARD, KeyEvent.VK_LEFT);
-        controller.addCommand("turnRight", Controller.KEYBOARD, KeyEvent.VK_RIGHT);
-        controller.addCommand("forward", Controller.KEYBOARD, KeyEvent.VK_UP);
-        controller.addCommand("backward", Controller.KEYBOARD, KeyEvent.VK_DOWN);
-        controller.addCommand("changeCamera", Controller.KEYBOARD, KeyEvent.VK_C, true);
+        controller.addCommand("turnLeft", Controller.KEYBOARD, KeyEvent.VK_LEFT, 0, 1, false, 10, false);
+        controller.addCommand("turnRight", Controller.KEYBOARD, KeyEvent.VK_RIGHT, 0, 1, false, 10, false);
+        controller.addCommand("forward", Controller.KEYBOARD, KeyEvent.VK_UP, 0, 1, false, 0, false);
+        controller.addCommand("backward", Controller.KEYBOARD, KeyEvent.VK_DOWN, 0, 1, false, 0, false);
+        controller.addCommand("changeCamera", Controller.KEYBOARD, KeyEvent.VK_C, 0, 1, false, 0, true);
 
         // start main thread
         this.start();
@@ -107,7 +109,7 @@ public class Main extends Thread
     public void run()
     {
         view.getCanvas3D().setVisible(true);
-        frame.getContentPane().setBackground(Color.WHITE);
+        frame.getContentPane().setBackground(Color.BLACK);
         frame.setVisible(true);
         view.getCanvas3D().requestFocus();
 
@@ -120,13 +122,10 @@ public class Main extends Thread
         view.getCanvas3D().setDoubleBufferEnable(true);
 
         // define camera as observer for car model
-        //myCar.getModel().getObservable().addObserver(view.getCamera());
+        // myCar.getModel().getObservable().addObserver(view.getCamera());
 
+        // start FPS counter
         Util.startFPSCounter();
-        
-        int carUpdate = 0;
-        int camUpdate = 0;
-        int flushUpdate = 0;
 
         while (true)
         {
@@ -134,11 +133,7 @@ public class Main extends Thread
             // control car
             if (!myCar.isCollision())
             {
-                if (controller.getCommand("turnLeft") > 0)
-                    myCar.turnLeft(myCar.getMaxTurn() * controller.getCommand("turnLeft"));
-
-                if (controller.getCommand("turnRight") > 0)
-                    myCar.turnRight(myCar.getMaxTurn() * controller.getCommand("turnRight"));
+                myCar.steer(myCar.getMaxTurn() * controller.getCommand("turnLeft") - myCar.getMaxTurn() * controller.getCommand("turnRight"));
 
                 if (controller.getCommand("forward") > -1)
                     myCar.accelerate(myCar.getMaxAcceleration() * controller.getCommand("forward"));
@@ -160,14 +155,17 @@ public class Main extends Thread
                 view.getCamera().changeView();
             }
 
-            Util.delay(delay);
-
             synchronized (this)
             {
                 myCar.update();
                 view.getCamera().update(true);
                 view.getCanvas3D().getGraphicsContext3D().flush(true);
             }
+
+            MyCanvas3D myCanvas = (MyCanvas3D) view.getCanvas3D();
+            myCanvas.rotateImage(myCar.getSteer() * -20f);
+
+            Util.delay(delay);
         }
     }
 

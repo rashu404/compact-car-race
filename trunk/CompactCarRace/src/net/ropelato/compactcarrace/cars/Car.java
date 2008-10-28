@@ -26,6 +26,7 @@ public class Car
     float maxDeceleration = 0.02f;
     float stdDeceleration = 0.01f;
     float acceleration = 0f;
+    float steer = 0f;
 
     public Car(Model model)
     {
@@ -111,6 +112,8 @@ public class Car
         float xLength = this.getWidth() * (float) Math.cos(Math.toRadians(rotationY)) + this.getLength() * (float) Math.sin(Math.toRadians(rotationY));
         float zLength = this.getLength() * (float) Math.cos(Math.toRadians(rotationY)) + this.getWidth() * (float) Math.sin(Math.toRadians(rotationY));
 
+        System.out.println(xLength+" x "+zLength);
+        
         float frontX = this.getPositionX();
         float frontZ = this.getPositionZ() - zLength / 2;
         float frontY = 0f;
@@ -324,16 +327,12 @@ public class Car
         this.acceleration = -1 * deceleration;
     }
 
-    public void turnLeft(float angle)
+    public void steer(float angle)
     {
+        this.steer = angle;
         this.turnY(angle * speed / maxSpeed);
     }
-
-    public void turnRight(float angle)
-    {
-        this.turnY(angle * -1 * speed / maxSpeed);
-    }
-
+    
     public float getLength()
     {
         return length;
@@ -352,5 +351,10 @@ public class Car
     public void setWidth(float width)
     {
         this.width = width;
+    }
+
+    public float getSteer()
+    {
+        return steer;
     }
 }
