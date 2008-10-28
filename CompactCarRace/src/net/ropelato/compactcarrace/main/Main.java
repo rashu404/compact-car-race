@@ -90,10 +90,6 @@ public class Main extends Thread
         myCar.getModel().setCollidable(true);
         view.addBranchGroup(myCar.getModel());
         
-        Tacho myTacho = new Tacho("./cars/minicooper/img/minicooper_tacho.png", "./cars/minicooper/img/minicooper_tacho_pointer.png", view.getCanvas3D());
-        myCar.setTacho(myTacho);
-        ((MyCanvas3D)view.getCanvas3D()).addPaintComponent(myTacho);
-        
         // setup camera
         view.getCamera().setCameraMode(Camera.THIRD_PERSON);
         view.getCanvas3D().getGraphicsContext3D().setBufferOverride(false);
@@ -118,13 +114,20 @@ public class Main extends Thread
         frame.setVisible(true);
         view.getCanvas3D().requestFocus();
 
-        myCar.setPosition(0, 0, -5f);
+        //prepare car
+        myCar.setPosition(-2f, 0, -5f);
         myCar.setRotation(0f, 0f, 0f);
         myCar.update();
         myCar.getModel().setCollision(false);
+        
+        //prepare tacho
+        Tacho myTacho = new Tacho("./cars/minicooper/img/minicooper_tacho.png", "./cars/minicooper/img/minicooper_tacho_pointer.png", view.getCanvas3D());
+        myTacho.setPositionX(view.getCanvas3D().getWidth()-119-10);
+        myTacho.setPositionY(view.getCanvas3D().getHeight()-122-10);
+        ((MyCanvas3D)view.getCanvas3D()).addPaintComponent(myTacho);
+        myCar.setTacho(myTacho);
 
         view.getCamera().setTargetModel(myCar.getModel());
-        view.getCanvas3D().setDoubleBufferEnable(true);
 
         // define camera as observer for car model
         // myCar.getModel().getObservable().addObserver(view.getCamera());

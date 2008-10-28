@@ -16,6 +16,8 @@ public class Tacho implements PaintComponent
     Image tachoPointer = null;
     AffineTransform pointerTransform = new AffineTransform();
     ImageObserver imageObserver = null;
+    int positionX = 0;
+    int positionY = 0;
 
     public Tacho(String tachoImage, String pointerImage, ImageObserver imageObserver)
     {
@@ -30,14 +32,34 @@ public class Tacho implements PaintComponent
     {
         if (tachoPointer != null)
         {
-            pointerTransform.setToTranslation(20, 20);
+            pointerTransform.setToTranslation(positionX, positionY);
             pointerTransform.rotate(Math.toRadians(angle), tachoPointer.getWidth(imageObserver) / 2, tachoPointer.getHeight(imageObserver) / 2);
         }
     }
 
     public void paint(J3DGraphics2D g)
     {
-        g.drawImage(tacho, 20, 20, imageObserver);
+        g.drawImage(tacho, positionX, positionY, imageObserver);
         g.drawImage(tachoPointer, pointerTransform, imageObserver);
+    }
+    
+    public int getPositionX()
+    {
+        return positionX;
+    }
+
+    public void setPositionX(int positionX)
+    {
+        this.positionX = positionX;
+    }
+
+    public int getPositionY()
+    {
+        return positionY;
+    }
+
+    public void setPositionY(int positionY)
+    {
+        this.positionY = positionY;
     }
 }
