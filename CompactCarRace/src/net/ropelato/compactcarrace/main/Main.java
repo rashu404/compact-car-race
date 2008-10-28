@@ -90,7 +90,7 @@ public class Main extends Thread
         myCar.getModel().setCollidable(true);
         view.addBranchGroup(myCar.getModel());
         
-        Tacho myTacho = new Tacho("./img/mini_tacho.png", "./img/mini_tacho_pointer.png", view.getCanvas3D());
+        Tacho myTacho = new Tacho("./cars/minicooper/img/minicooper_tacho.png", "./cars/minicooper/img/minicooper_tacho_pointer.png", view.getCanvas3D());
         myCar.setTacho(myTacho);
         ((MyCanvas3D)view.getCanvas3D()).addPaintComponent(myTacho);
         
