@@ -12,6 +12,8 @@ import net.ropelato.compactcarrace.world.World;
 public class Car
 {
     Model model = null;
+    Tacho tacho = null;
+    
     float length = 2.5f;
     float width = 2f;
     float smoothMoves = 10f;
@@ -20,11 +22,11 @@ public class Car
     float targetZ = 0f;
     float speed = 0f;
     float maxTurn = 3f;
-    float maxSpeed = 0.4f;
+    float maxSpeed = 0.8f;
     float minSpeed = -0.3f;
-    float maxAcceleration = 0.005f;
-    float maxDeceleration = 0.005f;
-    float stdDeceleration = 0.002f;
+    float maxAcceleration = 0.01f;
+    float maxDeceleration = 0.01f;
+    float stdDeceleration = 0.003f;
     float pitchInfluence = 0.00018f;
     float acceleration = 0f;
 
@@ -50,6 +52,16 @@ public class Car
         CollisionExitDetector collisionExitDetector = new CollisionExitDetector(model);
         collisionExitDetector.setSchedulingBounds(collisionBounds);
         model.addChild(collisionExitDetector);
+    }
+
+    public Tacho getTacho()
+    {
+        return tacho;
+    }
+
+    public void setTacho(Tacho tacho)
+    {
+        this.tacho = tacho;
     }
 
     public void setPositionX(float positionX)
@@ -213,8 +225,13 @@ public class Car
 
         speed -= pitch * pitchInfluence;
 
-        this.move((1f - Math.abs(pitch / 90f)) * speed);
+        this.move(1f/(float)Math.sqrt(1+Math.pow(Math.tan(Math.toRadians(Math.abs(pitch))), 2d)) * speed);
         model.update();
+        
+        if(tacho!=null)
+        {
+            tacho.rotatePointer(Math.abs(speed)*100);
+        }
     }
 
     public Model getModel()

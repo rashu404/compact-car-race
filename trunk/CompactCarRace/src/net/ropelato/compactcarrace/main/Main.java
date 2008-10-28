@@ -10,6 +10,7 @@ import javax.media.j3d.BranchGroup;
 import javax.swing.JFrame;
 
 import net.ropelato.compactcarrace.cars.Car;
+import net.ropelato.compactcarrace.cars.Tacho;
 import net.ropelato.compactcarrace.controls.Controller;
 import net.ropelato.compactcarrace.graphics3d.Camera;
 import net.ropelato.compactcarrace.graphics3d.Model;
@@ -88,7 +89,11 @@ public class Main extends Thread
         myCar = new Car(myCarModel);
         myCar.getModel().setCollidable(true);
         view.addBranchGroup(myCar.getModel());
-
+        
+        Tacho myTacho = new Tacho("./img/mini_tacho.png", "./img/mini_tacho_pointer.png", view.getCanvas3D());
+        myCar.setTacho(myTacho);
+        ((MyCanvas3D)view.getCanvas3D()).addPaintComponent(myTacho);
+        
         // setup camera
         view.getCamera().setCameraMode(Camera.THIRD_PERSON);
         view.getCanvas3D().getGraphicsContext3D().setBufferOverride(false);
@@ -163,7 +168,6 @@ public class Main extends Thread
             }
 
             MyCanvas3D myCanvas = (MyCanvas3D) view.getCanvas3D();
-            myCanvas.rotatePointer(Math.abs(myCar.getSpeed())*100);
 
             Util.delay(delay);
         }
