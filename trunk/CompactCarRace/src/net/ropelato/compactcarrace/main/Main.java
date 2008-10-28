@@ -163,16 +163,14 @@ public class Main extends Thread
                 view.getCamera().changeView();
             }
 
+            Util.delay(delay);
+
             synchronized (this)
             {
                 myCar.update();
                 view.getCamera().update(true);
-                view.getCanvas3D().getGraphicsContext3D().flush(true);
+                view.getCanvas3D().getGraphicsContext3D().flush(false);
             }
-
-            MyCanvas3D myCanvas = (MyCanvas3D) view.getCanvas3D();
-
-            Util.delay(delay);
         }
     }
 

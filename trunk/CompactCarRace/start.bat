@@ -14,3 +14,4 @@ set classp=%classp%;./lib/mysqlconnector.jar
 
 java -classpath %classp% %mainclass%
 
+pause
