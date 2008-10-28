@@ -163,7 +163,7 @@ public class Main extends Thread
             }
 
             MyCanvas3D myCanvas = (MyCanvas3D) view.getCanvas3D();
-            myCanvas.rotateImage(myCar.getSteer() * -20f);
+            myCanvas.rotatePointer(Math.abs(myCar.getSpeed())*100);
 
             Util.delay(delay);
         }

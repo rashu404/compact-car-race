@@ -19,22 +19,23 @@ import net.ropelato.compactcarrace.util.Util;
 
 public class MyCanvas3D extends Canvas3D
 {
-    Image img = null;
+    Image tacho = null;
+    Image tachoPointer = null;
     AffineTransform imgTransform = null;
 
     public MyCanvas3D(GraphicsConfiguration graphicsConfiguration)
     {
         super(graphicsConfiguration);
 
-        img = Util.loadImage(new File("./img/steering_wheel.png"));
+        tacho = Util.loadImage(new File("./img/mini_tacho.png"));
+        tachoPointer = Util.loadImage(new File("./img/mini_tacho_pointer.png"));
         imgTransform = new AffineTransform();
-
     }
 
-    public void rotateImage(float angle)
+    public void rotatePointer(float angle)
     {
-        imgTransform.setToTranslation(20, 80);
-        imgTransform.rotate(Math.toRadians(angle), img.getWidth(this) / 2, img.getHeight(this) / 2);
+        imgTransform.setToTranslation(20, 20);
+        imgTransform.rotate(Math.toRadians(angle), tacho.getWidth(this) / 2, tacho.getHeight(this) / 2);
 
         // imgTransform.rotate(angle, img.getWidth(this)/2, img.getHeight(this)/2);
     }
@@ -45,10 +46,8 @@ public class MyCanvas3D extends Canvas3D
 
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g.setColor(Color.RED);
-        g.fillOval(20, 20, 40, 40);
-
-        g.drawImage(img, imgTransform, this);
+        g.drawImage(tacho, 20, 20, this);
+        g.drawImage(tachoPointer, imgTransform, this);
 
         g.flush(false);
         super.postRender();

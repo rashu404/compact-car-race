@@ -22,9 +22,9 @@ public class Car
     float maxTurn = 3f;
     float maxSpeed = 0.4f;
     float minSpeed = -0.3f;
-    float maxAcceleration = 0.02f;
-    float maxDeceleration = 0.02f;
-    float stdDeceleration = 0.01f;
+    float maxAcceleration = 0.005f;
+    float maxDeceleration = 0.005f;
+    float stdDeceleration = 0.002f;
     float acceleration = 0f;
     float steer = 0f;
 
