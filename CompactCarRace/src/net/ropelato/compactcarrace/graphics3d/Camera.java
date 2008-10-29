@@ -33,6 +33,8 @@ public class Camera implements Observer
     public static int THIRD_PERSON = 1;
     public static int FIRST_PERSON = 2;
     public static int FOLLOW = 3;
+    
+    private static int MAX_PERSPECTIVE_ID = 2;
 
     public Camera(TransformGroup transformGroup)
     {
@@ -144,7 +146,7 @@ public class Camera implements Observer
                     atan = Float.MAX_VALUE;
                 }
 
-                targetRotationY = (float) Math.toDegrees(Math.atan((targetModel.getPositionX() - positionX) / (targetModel.getPositionZ() - positionZ)));
+                targetRotationY = (float) Math.toDegrees(Math.atan(atan));
 
                 if (distanceZ >= 0)
                 {
@@ -273,7 +275,7 @@ public class Camera implements Observer
     public void changeView()
     {
         cameraMode++;
-        if (cameraMode > 2)
+        if (cameraMode > MAX_PERSPECTIVE_ID)
         {
             cameraMode = 0;
         }

@@ -22,7 +22,7 @@ import net.ropelato.compactcarrace.view.MyCanvas3D;
 import net.ropelato.compactcarrace.view.View;
 import net.ropelato.compactcarrace.world.World;
 
-public class Main extends Thread implements Modifiable
+public class Main implements Modifiable
 {
     View view = null;
     Car myCar = null;
@@ -30,6 +30,7 @@ public class Main extends Thread implements Modifiable
     World world = null;
     int delay = 15;
     public static JFrame frame = null;
+    boolean updated = true;
 
     private Main()
     {
@@ -104,12 +105,7 @@ public class Main extends Thread implements Modifiable
         controller.addCommand("backward", Controller.KEYBOARD, KeyEvent.VK_DOWN, 0, 1, false, 0, false);
         controller.addCommand("changeCamera", Controller.KEYBOARD, KeyEvent.VK_C, 0, 1, false, 0, true);
 
-        // start main thread
-        this.start();
-    }
-
-    public void run()
-    {
+        // show canvas
         view.getCanvas3D().setVisible(true);
         frame.getContentPane().setBackground(Color.BLACK);
         frame.setVisible(true);
@@ -138,44 +134,40 @@ public class Main extends Thread implements Modifiable
         // start FPS counter
         Util.startFPSCounter();
 
-        while (true)
-        {
-
-            // control car
-            if (!myCar.isCollision())
-            {
-                myCar.steer(myCar.getMaxTurn() * controller.getCommand("turnLeft") - myCar.getMaxTurn() * controller.getCommand("turnRight"));
-
-                if (controller.getCommand("forward") > -1)
-                    myCar.accelerate(myCar.getMaxAcceleration() * controller.getCommand("forward"));
-
-                if (controller.getCommand("backward") > 0)
-                    myCar.decelerate(myCar.getMaxDeceleration() * controller.getCommand("backward"));
-
-            }
-            else
-            {
-                myCar.resetCollision();
-            }
-
-            myCar.adaptToTerrain(world);
-
-            // change camera view
-            if (controller.getCommand("changeCamera") == 1)
-            {
-                view.getCamera().changeView();
-            }
-            
-            myCar.updateValues();
-
-            Util.delay(delay);
-        }
     }
 
-    public void update()
+    public void doFrame()
     {
-        myCar.updatePhysics();
-        view.getCamera().update(false);
+
+        // control car
+        if (!myCar.isCollision())
+        {
+            myCar.steer(myCar.getMaxTurn() * controller.getCommand("turnLeft") - myCar.getMaxTurn() * controller.getCommand("turnRight"));
+
+            if (controller.getCommand("forward") > -1)
+                myCar.accelerate(myCar.getMaxAcceleration() * controller.getCommand("forward"));
+
+            if (controller.getCommand("backward") > 0)
+                myCar.decelerate(myCar.getMaxDeceleration() * controller.getCommand("backward"));
+
+        }
+        else
+        {
+            myCar.resetCollision();
+        }
+
+        myCar.adaptToTerrain(world);
+
+        // change camera view
+        if (controller.getCommand("changeCamera") == 1)
+        {
+            view.getCamera().changeView();
+        }
+
+        myCar.update();
+        view.getCamera().update(true);
+
+        Util.delay(delay);
     }
 
     public String selectWorld()

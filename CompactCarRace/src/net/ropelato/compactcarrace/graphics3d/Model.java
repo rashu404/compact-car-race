@@ -27,12 +27,13 @@ public class Model extends BranchGroup
     boolean collision = false;
     boolean autoUpdate = false;
 
-    float rotationX = 0f;
-    float rotationY = 0f;
-    float rotationZ = 0f;
     float positionX = 0f;
     float positionY = 0f;
     float positionZ = 0f;
+
+    float rotationX = 0f;
+    float rotationY = 0f;
+    float rotationZ = 0f;
 
     float scale = 0f;
 
