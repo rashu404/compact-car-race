@@ -17,11 +17,12 @@ import net.ropelato.compactcarrace.graphics3d.Model;
 import net.ropelato.compactcarrace.graphics3d.MyPointLight;
 import net.ropelato.compactcarrace.graphics3d.Terrain;
 import net.ropelato.compactcarrace.util.Util;
+import net.ropelato.compactcarrace.view.Modifiable;
 import net.ropelato.compactcarrace.view.MyCanvas3D;
 import net.ropelato.compactcarrace.view.View;
 import net.ropelato.compactcarrace.world.World;
 
-public class Main extends Thread
+public class Main extends Thread implements Modifiable
 {
     View view = null;
     Car myCar = null;
@@ -89,7 +90,7 @@ public class Main extends Thread
         myCar = new Car(myCarModel);
         myCar.getModel().setCollidable(true);
         view.addBranchGroup(myCar.getModel());
-        
+
         // setup camera
         view.getCamera().setCameraMode(Camera.THIRD_PERSON);
         view.getCanvas3D().getGraphicsContext3D().setBufferOverride(false);
@@ -114,17 +115,19 @@ public class Main extends Thread
         frame.setVisible(true);
         view.getCanvas3D().requestFocus();
 
-        //prepare car
+        // prepare car
         myCar.setPosition(-2f, 0, -5f);
         myCar.setRotation(0f, 0f, 0f);
-        myCar.update();
+        myCar.updateValues();
+        myCar.updatePhysics();
         myCar.getModel().setCollision(false);
-        
-        //prepare tacho
+
+        // prepare tacho
         Tacho myTacho = new Tacho("./cars/minicooper/img/minicooper_tacho.png", "./cars/minicooper/img/minicooper_tacho_pointer.png", view.getCanvas3D());
-        myTacho.setPositionX(view.getCanvas3D().getWidth()-119-10);
-        myTacho.setPositionY(view.getCanvas3D().getHeight()-122-10);
-        ((MyCanvas3D)view.getCanvas3D()).addPaintComponent(myTacho);
+        myTacho.setPositionX(view.getCanvas3D().getWidth() - 119 - 10);
+        myTacho.setPositionY(view.getCanvas3D().getHeight() - 122 - 10);
+        ((MyCanvas3D) view.getCanvas3D()).addPaintComponent(myTacho);
+        ((MyCanvas3D) view.getCanvas3D()).addModifiable(this);
         myCar.setTacho(myTacho);
 
         view.getCamera().setTargetModel(myCar.getModel());
@@ -162,16 +165,17 @@ public class Main extends Thread
             {
                 view.getCamera().changeView();
             }
+            
+            myCar.updateValues();
 
             Util.delay(delay);
-
-            synchronized (this)
-            {
-                myCar.update();
-                view.getCamera().update(true);
-                view.getCanvas3D().getGraphicsContext3D().flush(false);
-            }
         }
+    }
+
+    public void update()
+    {
+        myCar.updatePhysics();
+        view.getCamera().update(false);
     }
 
     public String selectWorld()

@@ -13,7 +13,7 @@ public class Car
 {
     Model model = null;
     Tacho tacho = null;
-    
+
     float length = 2.5f;
     float width = 2f;
     float smoothMoves = 10f;
@@ -200,8 +200,10 @@ public class Car
         return model.getRotationZ();
     }
 
-    public void update()
+    public void updateValues()
     {
+        speed -= pitch * pitchInfluence;
+
         if ((acceleration > 0 && speed < maxSpeed) || (acceleration < 0 && speed > minSpeed))
         {
             speed += acceleration;
@@ -223,17 +225,20 @@ public class Car
             }
         }
 
-        speed -= pitch * pitchInfluence;
+        this.move(1f / (float) Math.sqrt(1 + Math.pow(Math.tan(Math.toRadians(Math.abs(pitch))), 2d)) * speed);
 
-        this.move(1f/(float)Math.sqrt(1+Math.pow(Math.tan(Math.toRadians(Math.abs(pitch))), 2d)) * speed);
-        model.update();
-        
-        if(tacho!=null)
+
+        if (tacho != null)
         {
-            tacho.rotatePointer(Math.abs(speed)*100);
+            tacho.rotatePointer(Math.abs(speed) * 100);
         }
     }
 
+    public void updatePhysics()
+    {
+        model.update();
+    }
+    
     public Model getModel()
     {
         return model;
