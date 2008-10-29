@@ -211,7 +211,7 @@ public class Car
         updateValues();
         updatePhysics();
     }
-    
+
     public void updateValues()
     {
         speed -= pitch * pitchInfluence;
@@ -384,5 +384,10 @@ public class Car
     public float getSteer()
     {
         return steer;
+    }
+
+    public boolean isReverse()
+    {
+        return acceleration < 0 && speed < 0;
     }
 }
