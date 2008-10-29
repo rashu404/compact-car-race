@@ -39,7 +39,7 @@ public class MyCanvas3D extends Canvas3D
         for (int i = 0; i < modifyables.size(); i++)
         {
             Modifiable modifiable = (Modifiable) modifyables.get(i);
-            modifiable.update();
+            modifiable.doFrame();
         }
     }
 

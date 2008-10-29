@@ -14,6 +14,14 @@ public class Car
     Model model = null;
     Tacho tacho = null;
 
+    float positionX = 0f;
+    float positionY = 0f;
+    float positionZ = 0f;
+
+    float rotationX = 0f;
+    float rotationY = 0f;
+    float rotationZ = 0f;
+
     float length = 2.5f;
     float width = 2f;
     float smoothMoves = 10f;
@@ -123,13 +131,11 @@ public class Car
     {
         Terrain activeTerrain;
 
-        float rotationY = getRotationY();
-
         float xLength = this.getWidth() * (float) (Math.cos(Math.toRadians(rotationY)) + 1) * 0.5f + this.getLength() * (float) (Math.sin(Math.toRadians(rotationY)) + 1) * 0.5f;
         float zLength = this.getLength() * (float) (Math.cos(Math.toRadians(rotationY)) + 1) * 0.5f + this.getWidth() * (float) (Math.sin(Math.toRadians(rotationY)) + 1) * 0.5f;
 
-        float frontX = this.getPositionX();
-        float frontZ = this.getPositionZ() - zLength / 2;
+        float frontX = positionX;
+        float frontZ = positionZ - zLength / 2;
         float frontY = 0f;
         activeTerrain = world.getActiveTerrain(frontX, frontZ);
         if (activeTerrain != null)
@@ -137,8 +143,8 @@ public class Car
             frontY = activeTerrain.getPositionY(frontX, frontZ);
         }
 
-        float backX = this.getPositionX();
-        float backZ = this.getPositionZ() + zLength / 2;
+        float backX = positionX;
+        float backZ = positionZ + zLength / 2;
         float backY = 0f;
         activeTerrain = world.getActiveTerrain(backX, backZ);
         if (activeTerrain != null)
@@ -146,8 +152,8 @@ public class Car
             backY = activeTerrain.getPositionY(backX, backZ);
         }
 
-        float leftX = this.getPositionX() - xLength / 2;
-        float leftZ = this.getPositionZ();
+        float leftX = positionX - xLength / 2;
+        float leftZ = positionZ;
         float leftY = 0f;
         activeTerrain = world.getActiveTerrain(leftX, leftZ);
         if (activeTerrain != null)
@@ -155,8 +161,8 @@ public class Car
             leftY = activeTerrain.getPositionY(leftX, leftZ);
         }
 
-        float rightX = this.getPositionX() + xLength / 2;
-        float rightZ = this.getPositionZ();
+        float rightX = positionX + xLength / 2;
+        float rightZ = positionZ;
         float rightY = 0f;
         activeTerrain = world.getActiveTerrain(rightX, rightZ);
         if (activeTerrain != null)
@@ -164,8 +170,8 @@ public class Car
             rightY = activeTerrain.getPositionY(rightX, rightZ);
         }
 
-        float centerX = this.getPositionX();
-        float centerZ = this.getPositionZ();
+        float centerX = positionX;
+        float centerZ = positionZ;
         float centerY = 0f;
         activeTerrain = world.getActiveTerrain(centerX, centerZ);
         if (activeTerrain != null)
@@ -175,14 +181,14 @@ public class Car
 
         centerY = Math.max(centerY, (leftY + rightY) / 2);
 
-        float rotationX = (float) Math.toDegrees(Math.atan((frontY - backY) / zLength));
-        float rotationZ = (float) Math.toDegrees(Math.atan((rightY - leftY) / xLength));
+        rotationX = (float) Math.toDegrees(Math.atan((frontY - backY) / zLength));
+        rotationZ = (float) Math.toDegrees(Math.atan((rightY - leftY) / xLength));
 
         pitch = rotationX * (float) Math.cos(Math.toRadians(rotationY)) - rotationZ * (float) Math.sin(Math.toRadians(rotationY));
         roll = -rotationZ * (float) Math.cos(Math.toRadians(rotationY)) - rotationX * (float) Math.sin(Math.toRadians(rotationY));
 
-        this.setPositionY(centerY);
-        setRotation(rotationX, rotationY, rotationZ);
+        positionY = centerY;
+
     }
 
     public float getRotationX()
@@ -200,6 +206,12 @@ public class Car
         return model.getRotationZ();
     }
 
+    public void update()
+    {
+        updateValues();
+        updatePhysics();
+    }
+    
     public void updateValues()
     {
         speed -= pitch * pitchInfluence;
@@ -227,7 +239,6 @@ public class Car
 
         this.move(1f / (float) Math.sqrt(1 + Math.pow(Math.tan(Math.toRadians(Math.abs(pitch))), 2d)) * speed);
 
-
         if (tacho != null)
         {
             tacho.rotatePointer(Math.abs(speed) * 100);
@@ -236,9 +247,11 @@ public class Car
 
     public void updatePhysics()
     {
+        setPosition(positionX, positionY, positionZ);
+        setRotation(rotationX, rotationY, rotationZ);
         model.update();
     }
-    
+
     public Model getModel()
     {
         return model;
@@ -251,14 +264,13 @@ public class Car
 
     public void turnY(float turnY)
     {
-        setRotationY(getRotationY() + turnY);
+        rotationY += turnY;
     }
 
     public void move(float speed)
     {
-        float positionX = getPositionX() - (float) Math.sin(Math.toRadians(getRotationY())) * speed;
-        float positionZ = getPositionZ() - (float) Math.cos(Math.toRadians(getRotationY())) * speed;
-        setPosition(positionX, getPositionY(), positionZ);
+        positionX -= (float) Math.sin(Math.toRadians(rotationY)) * speed;
+        positionZ -= (float) Math.cos(Math.toRadians(rotationY)) * speed;
     }
 
     public boolean isCollision()
