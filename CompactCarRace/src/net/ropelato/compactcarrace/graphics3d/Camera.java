@@ -71,11 +71,10 @@ public class Camera implements Observer
 
         transformX.rotX(Math.toRadians(rotationX));
         transform3D.mul(transformX);
-        transformY.rotY(Math.toRadians(rotationY));
-        transform3D.mul(transformY);
         transformZ.rotZ(Math.toRadians(rotationZ));
         transform3D.mul(transformZ);
-
+        transformY.rotY(Math.toRadians(rotationY));
+        transform3D.mul(transformY);
     }
 
     public void resetRotation()
@@ -153,7 +152,7 @@ public class Camera implements Observer
                     targetRotationY += 180;
                 }
 
-                setRotationY(targetRotationY);
+                setRotation(0f, targetRotationY, 0f);
 
                 distance = (float) Math.sqrt((distanceX * distanceX) + (distanceZ * distanceZ));
                 cameraSpeed = (distance - cameraDistance) / 10f;
@@ -187,11 +186,11 @@ public class Camera implements Observer
 
                 if (soft)
                 {
-                    setRotationY((getRotationY() * 10 + targetModel.getRotationY()) / 11);
+                    setRotation(0f, (getRotationY() * 10 + targetModel.getRotationY()) / 11, 0f);
                 }
                 else
                 {
-                    setRotationY(targetModel.getRotationY());
+                    setRotation(0f, targetModel.getRotationY(), 0f);
                 }
                 distance = (float) Math.sqrt(((targetModel.getPositionX() - positionX) * (targetModel.getPositionX() - positionX)) + ((targetModel.getPositionZ() - positionZ) * (targetModel.getPositionZ() - positionZ)));
                 cameraSpeed = -1 * cameraDistance;
@@ -204,9 +203,6 @@ public class Camera implements Observer
             }
             if (cameraMode == FIRST_PERSON)
             {
-                //setRotationY(targetModel.getRotationY());
-                //setRotationX(0f);
-
                 setRotation(targetModel.getRotationX(), targetModel.getRotationY(), targetModel.getRotationZ());
                 
                 positionX = targetModel.getPositionX();
@@ -221,14 +217,13 @@ public class Camera implements Observer
                 {
                     if (targetModel.getPositionZ() >= positionZ)
                     {
-                        setRotationY((float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))) + 180);
+                        setRotation(0f, (float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))) + 180, 0f);
                     }
                     else
                     {
-                        setRotationY((float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))));
+                        setRotation(0f, (float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))), 0f);
                     }
                 }
-
                 setPosition(positionX, positionY, positionZ);
             }
         }
