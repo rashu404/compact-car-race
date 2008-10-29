@@ -165,8 +165,10 @@ public class Main implements Modifiable
             view.getCamera().changeView();
         }
 
+        boolean reverse = myCar.isReverse();
         myCar.update();
-        view.getCamera().update(true);
+        view.getCamera().update(world, 10, myCar.getSpeed() * 5, reverse);
+        System.out.println(reverse);
 
         Util.delay(delay);
     }

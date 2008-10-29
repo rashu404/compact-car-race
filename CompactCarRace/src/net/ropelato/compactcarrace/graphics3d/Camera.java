@@ -1,14 +1,13 @@
 package net.ropelato.compactcarrace.graphics3d;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Vector3d;
 
-public class Camera implements Observer
+import net.ropelato.compactcarrace.world.World;
+
+public class Camera
 {
     TransformGroup transformGroup = null;
     Transform3D transform3D = null;
@@ -33,7 +32,7 @@ public class Camera implements Observer
     public static int THIRD_PERSON = 1;
     public static int FIRST_PERSON = 2;
     public static int FOLLOW = 3;
-    
+
     private static int MAX_PERSPECTIVE_ID = 2;
 
     public Camera(TransformGroup transformGroup)
@@ -119,16 +118,23 @@ public class Camera implements Observer
         this.cameraMode = cameraMode;
     }
 
-    public void update(boolean soft)
+    public void update(World world, float smooth, float additionalDistance, boolean reverse)
     {
-        updateCameraPosition(soft);
+        updateCameraPosition(world, smooth, additionalDistance, reverse);
         transformGroup.setTransform(transform3D);
     }
 
-    private void updateCameraPosition(boolean soft)
+    private void updateCameraPosition(World world, float smooth, float additionalDistance, boolean reverse)
     {
         if (targetModel != null)
         {
+            float turnAngle = 0f;
+
+            if (reverse)
+            {
+                turnAngle = 180f;
+            }
+
             if (cameraMode == FOLLOW)
             {
                 float distanceX = (targetModel.getPositionX() - positionX);
@@ -165,46 +171,50 @@ public class Camera implements Observer
             }
             if (cameraMode == THIRD_PERSON)
             {
-                positionX = targetModel.getPositionX();
-                positionZ = targetModel.getPositionZ();
+                float targetPositionX = targetModel.getPositionX();
+                float targetPositionZ = targetModel.getPositionZ();
 
                 boolean correction = true;
                 while (correction)
                 {
                     correction = false;
-                    if (targetModel.getRotationY() >= rotationY + 180)
+                    if (targetModel.getRotationY() + turnAngle >= rotationY + 180)
                     {
                         rotationY += 360;
                         correction = true;
                     }
-                    if (targetModel.getRotationY() <= rotationY - 180)
+                    if (targetModel.getRotationY() + turnAngle <= rotationY - 180)
                     {
                         rotationY -= 360;
                         correction = true;
                     }
                 }
 
-                if (soft)
-                {
-                    setRotation(0f, (getRotationY() * 10 + targetModel.getRotationY()) / 11, 0f);
-                }
-                else
-                {
-                    setRotation(0f, targetModel.getRotationY(), 0f);
-                }
                 distance = (float) Math.sqrt(((targetModel.getPositionX() - positionX) * (targetModel.getPositionX() - positionX)) + ((targetModel.getPositionZ() - positionZ) * (targetModel.getPositionZ() - positionZ)));
-                cameraSpeed = -1 * cameraDistance;
 
-                positionX -= (float) Math.sin(Math.toRadians(rotationY)) * -1 * cameraDistance;
-                positionZ -= (float) Math.cos(Math.toRadians(rotationY)) * -1 * cameraDistance;
-                positionY = targetModel.getPositionY() + cameraHeight;
+                targetPositionX += (float) Math.sin(Math.toRadians(rotationY)) * (cameraDistance + additionalDistance);
+                targetPositionZ += (float) Math.cos(Math.toRadians(rotationY)) * (cameraDistance + additionalDistance);
+                float targetPositionY = targetModel.getPositionY();
 
-                setPosition(positionX, positionY, positionZ);
+                if (world != null && world.getActiveTerrain(positionX, positionZ) != null)
+                {
+                    targetPositionY = world.getActiveTerrain(positionX, positionZ).getPositionY(positionX, positionZ) + cameraHeight;
+                }
+
+                setPosition(targetPositionX, (getPositionY() * smooth + targetPositionY) / (smooth + 1), targetPositionZ);
+
+                float targetRotationX = (float) Math.cos(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY()) / (cameraDistance + additionalDistance)));
+                float targetRotationZ = (float) Math.sin(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY()) / (cameraDistance + additionalDistance)));
+
+                setRotation(targetRotationX, (getRotationY() * smooth + targetModel.getRotationY() + turnAngle) / (smooth + 1), targetRotationZ);
+
+                System.out.println(turnAngle);
+
             }
             if (cameraMode == FIRST_PERSON)
             {
                 setRotation(targetModel.getRotationX(), targetModel.getRotationY(), targetModel.getRotationZ());
-                
+
                 positionX = targetModel.getPositionX();
                 positionZ = targetModel.getPositionZ();
                 positionY = targetModel.getPositionY() + higherThanTargetModel;
@@ -276,11 +286,5 @@ public class Camera implements Observer
         {
             cameraMode = 0;
         }
-    }
-
-    public void update(Observable o, Object arg)
-    {
-        System.out.println("update");
-        update(true);
     }
 }
