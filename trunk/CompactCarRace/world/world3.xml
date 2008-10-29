@@ -28,8 +28,8 @@
 	<terrains>
 		<terrain collidable="false">
 			<fields x="4" z="4"/>
-			<position x="-40" y="0" z="-80"/>
-			<scale x="20" y="20" z="20"/>
+			<position x="-59" y="0" z="-120"/>
+			<scale x="30" y="15" z="30"/>
 			 <texture src="world/data/textures/pavement1.jpg" x="8" z="8"/>
 			<transparency visible="1"/>
 			<randomize x="0-4" z="0-4" height="0.0-0.2" seed="1"/>

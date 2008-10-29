@@ -1,18 +1,13 @@
 package net.ropelato.compactcarrace.view;
 
-import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
-import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
-import java.io.File;
 import java.util.ArrayList;
 
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.J3DGraphics2D;
 
 import net.ropelato.compactcarrace.graphics2d.PaintComponent;
-import net.ropelato.compactcarrace.util.Util;
 
 public class MyCanvas3D extends Canvas3D
 {

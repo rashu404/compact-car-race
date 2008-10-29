@@ -30,11 +30,11 @@ public class Car
     float targetZ = 0f;
     float speed = 0f;
     float maxTurn = 3f;
-    float maxSpeed = 0.8f;
+    float maxSpeed = 0.5f;
     float minSpeed = -0.3f;
-    float maxAcceleration = 0.01f;
+    float maxAcceleration = 0.004f;
     float maxDeceleration = 0.01f;
-    float stdDeceleration = 0.003f;
+    float stdDeceleration = 0.002f;
     float pitchInfluence = 0.00018f;
     float acceleration = 0f;
 
@@ -353,11 +353,6 @@ public class Car
     public void accelerate(float acceleration)
     {
         this.acceleration = acceleration;
-    }
-
-    public void decelerate(float deceleration)
-    {
-        this.acceleration = -1 * deceleration;
     }
 
     public void steer(float angle)
