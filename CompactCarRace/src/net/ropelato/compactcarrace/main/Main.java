@@ -30,7 +30,6 @@ public class Main implements Modifiable
     World world = null;
     int delay = 15;
     public static JFrame frame = null;
-    boolean updated = true;
 
     private Main()
     {
@@ -144,12 +143,14 @@ public class Main implements Modifiable
         {
             myCar.steer(myCar.getMaxTurn() * controller.getCommand("turnLeft") - myCar.getMaxTurn() * controller.getCommand("turnRight"));
 
-            if (controller.getCommand("forward") > -1)
-                myCar.accelerate(myCar.getMaxAcceleration() * controller.getCommand("forward"));
-
-            if (controller.getCommand("backward") > 0)
-                myCar.decelerate(myCar.getMaxDeceleration() * controller.getCommand("backward"));
-
+            if (myCar.getSpeed() >= 0)
+            {
+                myCar.accelerate(myCar.getMaxAcceleration() * controller.getCommand("forward") - myCar.getMaxDeceleration() * controller.getCommand("backward"));
+            }
+            else
+            {
+                myCar.accelerate(myCar.getMaxDeceleration() * controller.getCommand("forward") - myCar.getMaxAcceleration() * controller.getCommand("backward"));
+            }
         }
         else
         {

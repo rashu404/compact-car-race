@@ -204,9 +204,11 @@ public class Camera implements Observer
             }
             if (cameraMode == FIRST_PERSON)
             {
-                setRotationY(targetModel.getRotationY());
-                setRotationX(0f);
+                //setRotationY(targetModel.getRotationY());
+                //setRotationX(0f);
 
+                setRotation(targetModel.getRotationX(), targetModel.getRotationY(), targetModel.getRotationZ());
+                
                 positionX = targetModel.getPositionX();
                 positionZ = targetModel.getPositionZ();
                 positionY = targetModel.getPositionY() + higherThanTargetModel;
