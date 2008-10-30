@@ -30,6 +30,9 @@ public class Main implements Modifiable
     World world = null;
     int delay = 15;
     public static JFrame frame = null;
+    
+    Model animModel = null;
+    
 
     private Main()
     {
@@ -64,6 +67,7 @@ public class Main implements Modifiable
         {
             Model model = (Model) worldModels.get(i);
             view.addBranchGroup(model);
+            animModel = model;
         }
 
         BranchGroup ambientLight = world.getAmbientLightBG();
@@ -156,7 +160,6 @@ public class Main implements Modifiable
         {
             myCar.resetCollision();
         }
-
         myCar.adaptToTerrain(world);
 
         // change camera view
@@ -165,9 +168,9 @@ public class Main implements Modifiable
             view.getCamera().changeView();
         }
 
-        boolean reverse = myCar.isReverse();
+        // update objects and camera
         myCar.update();
-        view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, reverse);
+        view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
 
         Util.delay(delay);
     }
