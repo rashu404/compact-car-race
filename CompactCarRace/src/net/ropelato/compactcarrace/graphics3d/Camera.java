@@ -23,8 +23,10 @@ public class Camera
     Model targetModel = null;
     float cameraDistance = 10f;
     float cameraSpeed = 0f;
-    float cameraHeight = 2f;
     float distance = 0f;
+
+    float cameraHeight = 3f;
+    float centerAboveTarget = 2f;
 
     float higherThanTargetModel = 1.5f;
 
@@ -194,7 +196,7 @@ public class Camera
 
                 targetPositionX += (float) Math.sin(Math.toRadians(rotationY)) * (cameraDistance + additionalDistance);
                 targetPositionZ += (float) Math.cos(Math.toRadians(rotationY)) * (cameraDistance + additionalDistance);
-                float targetPositionY = targetModel.getPositionY();
+                float targetPositionY = targetModel.getPositionY() + cameraHeight;
 
                 if (world != null && world.getActiveTerrain(positionX, positionZ) != null)
                 {
@@ -203,17 +205,26 @@ public class Camera
 
                 setPosition(targetPositionX, (getPositionY() * smooth + targetPositionY) / (smooth + 1), targetPositionZ);
 
-                float targetRotationX = (float) Math.cos(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY()) / (cameraDistance + additionalDistance)));
-                float targetRotationZ = (float) Math.sin(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY()) / (cameraDistance + additionalDistance)));
+                float targetRotationX = (float) Math.cos(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY() - centerAboveTarget) / (cameraDistance + additionalDistance))) * -1;
+                float targetRotationZ = (float) Math.sin(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY() - centerAboveTarget) / (cameraDistance + additionalDistance)));
 
                 setRotation(targetRotationX, (getRotationY() * smooth + targetModel.getRotationY() + turnAngle) / (smooth + 1), targetRotationZ);
-
-                System.out.println(turnAngle);
-
             }
             if (cameraMode == FIRST_PERSON)
             {
-                setRotation(targetModel.getRotationX(), targetModel.getRotationY(), targetModel.getRotationZ());
+                float targetRotationX = targetModel.getRotationX();
+                float targetRotationZ = targetModel.getRotationZ();
+
+                while (targetRotationX > 180)
+                {
+                    targetRotationX -= 360;
+                }
+                while (targetRotationZ > 180)
+                {
+                    targetRotationZ -= 360;
+                }
+
+                setRotation((getRotationX() * smooth + targetRotationX) / (smooth + 1), targetModel.getRotationY(), (getRotationZ() * smooth + targetRotationZ) / (smooth + 1));
 
                 positionX = targetModel.getPositionX();
                 positionZ = targetModel.getPositionZ();
@@ -223,15 +234,20 @@ public class Camera
             }
             if (cameraMode == STATIC)
             {
+                distance = (float) Math.sqrt(((targetModel.getPositionX() - positionX) * (targetModel.getPositionX() - positionX)) + ((targetModel.getPositionZ() - positionZ) * (targetModel.getPositionZ() - positionZ)));
+
+                float targetRotationX = (float) Math.cos(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY() - centerAboveTarget) / (distance))) * -1;
+                float targetRotationZ = (float) Math.sin(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY() - centerAboveTarget) / (distance)));
+
                 if (targetModel.getPositionZ() - getPositionZ() != 0f)
                 {
                     if (targetModel.getPositionZ() >= positionZ)
                     {
-                        setRotation(0f, (float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))) + 180, 0f);
+                        setRotation(targetRotationX, (float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))) + 180, targetRotationZ);
                     }
                     else
                     {
-                        setRotation(0f, (float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))), 0f);
+                        setRotation(targetRotationX, (float) Math.toDegrees(Math.atan((((targetModel.getPositionX() - getPositionX())) / ((targetModel.getPositionZ() - getPositionZ()))))), targetRotationZ);
                     }
                 }
                 setPosition(positionX, positionY, positionZ);

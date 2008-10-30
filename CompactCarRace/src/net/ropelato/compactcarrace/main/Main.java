@@ -167,8 +167,7 @@ public class Main implements Modifiable
 
         boolean reverse = myCar.isReverse();
         myCar.update();
-        view.getCamera().update(world, 10, myCar.getSpeed() * 5, reverse);
-        System.out.println(reverse);
+        view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, reverse);
 
         Util.delay(delay);
     }
