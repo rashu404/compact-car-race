@@ -1,6 +1,6 @@
 package net.ropelato.compactcarrace.view;
 
-public interface Modifiable
+public interface FrameProcessor
 {
     public void doFrame();
 }
