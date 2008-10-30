@@ -41,6 +41,8 @@ public class Car
     float steer = 0f;
     float pitch = 0f;
     float roll = 0f;
+    
+    boolean reverse = false;
 
     public Car(Model model)
     {
@@ -218,6 +220,14 @@ public class Car
 
         if ((acceleration > 0 && speed < maxSpeed) || (acceleration < 0 && speed > minSpeed))
         {
+            if(acceleration < 0 && speed < 0)
+            {
+                reverse = true;
+            }
+            if(speed > 0)
+            {
+                reverse = false;
+            }
             speed += acceleration;
             acceleration = 0f;
         }
@@ -388,6 +398,6 @@ public class Car
 
     public boolean isReverse()
     {
-        return acceleration < 0 && speed < 0;
+        return reverse;
     }
 }
