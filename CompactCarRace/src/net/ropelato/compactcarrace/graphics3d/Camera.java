@@ -180,9 +180,14 @@ public class Camera
                 while (correction)
                 {
                     correction = false;
-                    if (targetModel.getRotationY() + turnAngle >= rotationY + 180)
+                    if (targetModel.getRotationY() + turnAngle > rotationY && targetModel.getRotationY() + turnAngle > rotationY + 180)
                     {
                         rotationY += 360;
+                        correction = true;
+                    }
+                    if (targetModel.getRotationY() + turnAngle < rotationY && targetModel.getRotationY() + turnAngle < rotationY - 180)
+                    {
+                        rotationY -= 360;
                         correction = true;
                     }
                 }

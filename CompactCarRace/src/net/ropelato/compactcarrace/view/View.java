@@ -1,6 +1,9 @@
 package net.ropelato.compactcarrace.view;
 
+import java.awt.DisplayMode;
+import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
@@ -16,16 +19,33 @@ public class View
     GraphicsConfiguration graphicsConfiguration = null;
     SimpleUniverse universe = null;
     Camera camera = null;
+    Frame frame = null;
 
-    public View()
+    public View(Frame frame, int resolutionX, int resolutionY, int colorDepth, boolean fullscreen)
     {
+        this.frame = frame;
+
         // *** set up graphics configuration ***
-        // GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
+        if (fullscreen)
+        {
+            frame.setUndecorated(true);
+
+            if (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isFullScreenSupported())
+            {
+                GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+            }
+            
+            if (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isDisplayChangeSupported())
+            {
+                DisplayMode displayMode = new DisplayMode(resolutionX, resolutionY, 32, DisplayMode.REFRESH_RATE_UNKNOWN);
+                GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setDisplayMode(displayMode);
+            }
+        }
         graphicsConfiguration = SimpleUniverse.getPreferredConfiguration();
         canvas3D = new MyCanvas3D(graphicsConfiguration);
         canvas3D.setDoubleBufferEnable(true);
         canvas3D.getGraphicsContext3D().setBufferOverride(false);
-        
+
         // *** create universe ***
         universe = new SimpleUniverse(canvas3D);
         universe.getViewer().getView().setSceneAntialiasingEnable(true);
@@ -36,7 +56,7 @@ public class View
         // *** create camera ***
         TransformGroup cameraTransformGroup = universe.getViewingPlatform().getMultiTransformGroup().getTransformGroup(0);
         camera = new Camera(cameraTransformGroup);
-        
+
         canvas3D.startRenderer();
     }
 
