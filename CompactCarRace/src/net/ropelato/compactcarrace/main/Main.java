@@ -116,7 +116,7 @@ public class Main implements FrameProcessor
 
         // prepare car
         myCar.setPosition(-0.01f, 0f, -2f);
-        myCar.setRotation(0f, 0.01f, 0f);
+        myCar.setRotation(0f, 0f, 0f);
         myCar.update();
         myCar.getModel().setCollision(false);
 
