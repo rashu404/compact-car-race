@@ -185,11 +185,6 @@ public class Camera
                         rotationY += 360;
                         correction = true;
                     }
-                    if (targetModel.getRotationY() + turnAngle <= rotationY - 180)
-                    {
-                        rotationY -= 360;
-                        correction = true;
-                    }
                 }
 
                 distance = (float) Math.sqrt(((targetModel.getPositionX() - positionX) * (targetModel.getPositionX() - positionX)) + ((targetModel.getPositionZ() - positionZ) * (targetModel.getPositionZ() - positionZ)));
