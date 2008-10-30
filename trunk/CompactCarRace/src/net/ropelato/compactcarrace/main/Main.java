@@ -2,8 +2,11 @@ package net.ropelato.compactcarrace.main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.media.j3d.BranchGroup;
@@ -30,9 +33,6 @@ public class Main implements FrameProcessor
     World world = null;
     int delay = 15;
     public static JFrame frame = null;
-    
-    Model animModel = null;
-    
 
     private Main()
     {
@@ -45,8 +45,12 @@ public class Main implements FrameProcessor
         frame.setLayout(new BorderLayout(1, 1));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // load invisible mouse cursor
+        Cursor cursor = frame.getToolkit().createCustomCursor(Util.loadImage(new File("./img/transparent.gif")), new Point(0, 0), "Cursor");
+        frame.setCursor(cursor);
+
         // create view
-        view = new View();
+        view = new View(frame, 1024, 768, 32, true);
 
         // add view to frame
         frame.getContentPane().setBackground(Color.BLACK);
@@ -67,9 +71,8 @@ public class Main implements FrameProcessor
         {
             Model model = (Model) worldModels.get(i);
             view.addBranchGroup(model);
-            animModel = model;
         }
-        
+
         BranchGroup ambientLight = world.getAmbientLightBG();
         view.addBranchGroup(ambientLight);
 
@@ -107,6 +110,7 @@ public class Main implements FrameProcessor
         controller.addCommand("forward", Controller.KEYBOARD, KeyEvent.VK_UP, 0, 1, false, 0, false);
         controller.addCommand("backward", Controller.KEYBOARD, KeyEvent.VK_DOWN, 0, 1, false, 0, false);
         controller.addCommand("changeCamera", Controller.KEYBOARD, KeyEvent.VK_C, 0, 1, false, 0, true);
+        controller.addCommand("escape", Controller.KEYBOARD, KeyEvent.VK_ESCAPE, 0, 1, false, 0, false);
 
         // show canvas
         view.getCanvas3D().setVisible(true);
@@ -115,7 +119,7 @@ public class Main implements FrameProcessor
         view.getCanvas3D().requestFocus();
 
         // prepare car
-        myCar.setPosition(-0.01f, 0f, -2f);
+        myCar.setPosition(-0.01f, 0f, -5f);
         myCar.setRotation(0f, 0f, 0f);
         myCar.update();
         myCar.getModel().setCollision(false);
@@ -164,6 +168,12 @@ public class Main implements FrameProcessor
             view.getCamera().changeView();
         }
 
+        // exit
+        if (controller.getCommand("escape") == 1)
+        {
+            end();
+        }
+
         // update objects and camera
         myCar.update();
         view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
@@ -175,6 +185,11 @@ public class Main implements FrameProcessor
     {
         String worldDescriptor = "world/world3.xml";
         return worldDescriptor;
+    }
+
+    public void end()
+    {
+        System.exit(0);
     }
 
     protected class CanvasKeyListener extends KeyAdapter
