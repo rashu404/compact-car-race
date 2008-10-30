@@ -11,8 +11,10 @@ import net.ropelato.compactcarrace.graphics2d.PaintComponent;
 
 public class MyCanvas3D extends Canvas3D
 {
+    private static final long serialVersionUID = 8754344452513329902L;
+    
     ArrayList paintComponents = new ArrayList();
-    ArrayList modifyables = new ArrayList();
+    ArrayList frameProcessors = new ArrayList();
 
     public MyCanvas3D(GraphicsConfiguration graphicsConfiguration)
     {
@@ -24,17 +26,17 @@ public class MyCanvas3D extends Canvas3D
         paintComponents.add(paintComponent);
     }
 
-    public void addModifiable(Modifiable modifiable)
+    public void addFrameProcessor(FrameProcessor frameProcessor)
     {
-        modifyables.add(modifiable);
+        frameProcessors.add(frameProcessor);
     }
 
     public void preRender()
     {
-        for (int i = 0; i < modifyables.size(); i++)
+        for (int i = 0; i < frameProcessors.size(); i++)
         {
-            Modifiable modifiable = (Modifiable) modifyables.get(i);
-            modifiable.doFrame();
+            FrameProcessor frameProcessor = (FrameProcessor) frameProcessors.get(i);
+            frameProcessor.doFrame();
         }
     }
 

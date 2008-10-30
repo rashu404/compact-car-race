@@ -39,8 +39,6 @@ public class Model extends BranchGroup
 
     String fileName = "";
 
-    //MyObservable observable = new MyObservable();
-
     public Model()
     {
         transform3D = new Transform3D();
@@ -69,10 +67,9 @@ public class Model extends BranchGroup
             }
 
             scene = loader.load(file.getName());
-
+            
             BranchGroup branchGroup = scene.getSceneGroup();
             transformGroup.addChild(branchGroup);
-
         }
         catch (Exception e)
         {
@@ -296,8 +293,8 @@ public class Model extends BranchGroup
         rotationY = Util.modifyAngle(rotationY);
         rotationZ = Util.modifyAngle(rotationZ);
         transformGroup.setTransform(transform3D);
-        
-        //observable.update();
+
+        // observable.update();
     }
 
     public TransformGroup getTransformGroup()
@@ -330,8 +327,7 @@ public class Model extends BranchGroup
         this.autoUpdate = autoUpdate;
     }
 
-    /*public Observable getObservable()
-    {
-        return observable;
-    }*/
+    /*
+     * public Observable getObservable() { return observable; }
+     */
 }

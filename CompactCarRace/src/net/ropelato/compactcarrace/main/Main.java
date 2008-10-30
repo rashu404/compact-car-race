@@ -17,12 +17,12 @@ import net.ropelato.compactcarrace.graphics3d.Model;
 import net.ropelato.compactcarrace.graphics3d.MyPointLight;
 import net.ropelato.compactcarrace.graphics3d.Terrain;
 import net.ropelato.compactcarrace.util.Util;
-import net.ropelato.compactcarrace.view.Modifiable;
+import net.ropelato.compactcarrace.view.FrameProcessor;
 import net.ropelato.compactcarrace.view.MyCanvas3D;
 import net.ropelato.compactcarrace.view.View;
 import net.ropelato.compactcarrace.world.World;
 
-public class Main implements Modifiable
+public class Main implements FrameProcessor
 {
     View view = null;
     Car myCar = null;
@@ -69,7 +69,7 @@ public class Main implements Modifiable
             view.addBranchGroup(model);
             animModel = model;
         }
-
+        
         BranchGroup ambientLight = world.getAmbientLightBG();
         view.addBranchGroup(ambientLight);
 
@@ -115,10 +115,9 @@ public class Main implements Modifiable
         view.getCanvas3D().requestFocus();
 
         // prepare car
-        myCar.setPosition(-2f, 0, -5f);
-        myCar.setRotation(0f, 0f, 0f);
-        myCar.updateValues();
-        myCar.updatePhysics();
+        myCar.setPosition(-0.01f, 0f, -2f);
+        myCar.setRotation(0f, 0.01f, 0f);
+        myCar.update();
         myCar.getModel().setCollision(false);
 
         // prepare tacho
@@ -126,13 +125,10 @@ public class Main implements Modifiable
         myTacho.setPositionX(view.getCanvas3D().getWidth() - 119 - 10);
         myTacho.setPositionY(view.getCanvas3D().getHeight() - 122 - 10);
         ((MyCanvas3D) view.getCanvas3D()).addPaintComponent(myTacho);
-        ((MyCanvas3D) view.getCanvas3D()).addModifiable(this);
+        ((MyCanvas3D) view.getCanvas3D()).addFrameProcessor(this);
         myCar.setTacho(myTacho);
 
         view.getCamera().setTargetModel(myCar.getModel());
-
-        // define camera as observer for car model
-        // myCar.getModel().getObservable().addObserver(view.getCamera());
 
         // start FPS counter
         Util.startFPSCounter();

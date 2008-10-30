@@ -35,13 +35,13 @@ public class Car
     float maxAcceleration = 0.004f;
     float maxDeceleration = 0.01f;
     float stdDeceleration = 0.002f;
-    float pitchInfluence = 0.00018f;
+    float pitchInfluence = 0.00021f;
     float acceleration = 0f;
 
     float steer = 0f;
     float pitch = 0f;
     float roll = 0f;
-    
+
     boolean reverse = false;
 
     public Car(Model model)
@@ -91,7 +91,9 @@ public class Car
 
     public void setPosition(float positionX, float positionY, float positionZ)
     {
-        model.setPosition(positionX, positionY, positionZ);
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.positionZ = positionZ;
     }
 
     public float getPositionX()
@@ -111,22 +113,24 @@ public class Car
 
     public void setRotationX(float rotationX)
     {
-        model.setRotationX(rotationX);
+        setRotation(rotationX, rotationY, rotationZ);
     }
 
     public void setRotationY(float rotationY)
     {
-        model.setRotationY(rotationY);
+        setRotation(rotationX, rotationY, rotationZ);
     }
 
     public void setRotationZ(float rotationZ)
     {
-        model.setRotationZ(rotationZ);
+        setRotation(rotationX, rotationY, rotationZ);
     }
 
     public void setRotation(float rotationX, float rotationY, float rotationZ)
     {
-        model.setRotation(rotationX, rotationY, rotationZ);
+        this.rotationX = rotationX;
+        this.rotationY = rotationY;
+        this.rotationZ = rotationZ;
     }
 
     public void adaptToTerrain(World world)
@@ -181,7 +185,7 @@ public class Car
             centerY = activeTerrain.getPositionY(centerX, centerZ);
         }
 
-        centerY = Math.max(centerY, (leftY + rightY) / 2);
+        //centerY = Math.max(centerY, (leftY + rightY) / 2);
 
         rotationX = (float) Math.toDegrees(Math.atan((frontY - backY) / zLength));
         rotationZ = (float) Math.toDegrees(Math.atan((rightY - leftY) / xLength));
@@ -220,11 +224,11 @@ public class Car
 
         if ((acceleration > 0 && speed < maxSpeed) || (acceleration < 0 && speed > minSpeed))
         {
-            if(acceleration < 0 && speed < 0)
+            if (acceleration < 0 && speed < 0)
             {
                 reverse = true;
             }
-            if(speed > 0)
+            if (speed > 0)
             {
                 reverse = false;
             }
@@ -257,8 +261,8 @@ public class Car
 
     public void updatePhysics()
     {
-        setPosition(positionX, positionY, positionZ);
-        setRotation(rotationX, rotationY, rotationZ);
+        model.setRotation(rotationX, rotationY, rotationZ);
+        model.setPosition(positionX, positionY, positionZ);
         model.update();
     }
 
