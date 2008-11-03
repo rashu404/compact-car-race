@@ -13,5 +13,3 @@ set classp=%classp%;./lib/ms3dloader.jar
 set classp=%classp%;./lib/mysqlconnector.jar
 
 java -classpath %classp% %mainclass%
-
-pause
