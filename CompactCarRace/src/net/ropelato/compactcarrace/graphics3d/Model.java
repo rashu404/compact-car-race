@@ -4,21 +4,24 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import net.ropelato.compactcarrace.util.Util;
 
-import com.glyphein.j3d.loaders.milkshape.MS3DLoader;
-import com.sun.j3d.loaders.Loader;
+import com.jlindamood.MS3D.*;
 import com.sun.j3d.loaders.Scene;
 
 public class Model extends BranchGroup
 {
+    private static final BoundingSphere INFINITE_SPHERE = new BoundingSphere(new Point3d(0, 0, 0), 1000d);
+    
     TransformGroup transformGroup = null;
     Transform3D transform3D = null;
     Scene scene = null;
@@ -59,17 +62,48 @@ public class Model extends BranchGroup
         this.fileName = fileName;
         try
         {
-            Loader loader = new MS3DLoader(MS3DLoader.LOAD_ALL);
-            File file = new java.io.File(fileName);
-            if (file.getParent().length() > 0)
-            {
-                loader.setBasePath(file.getParent() + java.io.File.separator);
-            }
 
-            scene = loader.load(file.getName());
-            
-            BranchGroup branchGroup = scene.getSceneGroup();
-            transformGroup.addChild(branchGroup);
+            /*
+             * if (fileName.toLowerCase().endsWith(".ms3d")) { Loader loader = new MS3DLoader(MS3DLoader.LOAD_ALL); File file = new java.io.File(fileName); if (file.getParent().length() > 0) { loader.setBasePath(file.getParent() + java.io.File.separator); } scene = loader.load(file.getName()); }
+             */
+
+            if (fileName.toLowerCase().endsWith(".ms3d"))
+            {
+
+                MilkLoader loader = new MilkLoader();
+                loader.setFlags(MilkLoader.LOAD_ALL);
+                
+                scene = loader.load(fileName);
+                
+                BranchGroup branchGroup = scene.getSceneGroup();
+
+                System.out.println(fileName + " loaded\n-----");
+
+                if (scene.getBehaviorNodes() != null)
+                {
+                    for (int i = 0; i < scene.getBehaviorNodes().length; i++)
+                    {
+                        MilkAnimation animation = (MilkAnimation)scene.getBehaviorNodes()[i];
+                        animation.setDuration(100);
+                        animation.setSchedulingBounds(INFINITE_SPHERE);
+                        branchGroup.addChild(animation);
+                    }
+                }
+                else
+                {
+                    System.out.println("behavior = null");
+                }
+
+                Enumeration e = scene.getSceneGroup().getAllChildren();
+                while (e.hasMoreElements())
+                {
+                    System.out.println(e.nextElement());
+                }
+
+                System.out.println("===============================");
+
+                transformGroup.addChild(branchGroup);
+            }
         }
         catch (Exception e)
         {

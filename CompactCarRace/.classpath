@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="lib/ms3dloader.jar"/>
 	<classpathentry kind="lib" path="lib/mysqlconnector.jar"/>
 	<classpathentry kind="lib" path="lib/vecmath.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Sandro Ropelato/Java Workspace/CompactCarRace/lib/3dsloader.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

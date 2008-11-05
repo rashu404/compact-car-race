@@ -31,7 +31,7 @@ public class Main implements FrameProcessor
     Car myCar = null;
     Controller controller = null;
     World world = null;
-    int delay = 15;
+    int delay = 0;
     public static JFrame frame = null;
 
     private Main()
@@ -176,7 +176,9 @@ public class Main implements FrameProcessor
 
         // update objects and camera
         myCar.update();
-        view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
+        view.getCamera().update(world, 4, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
+        
+        System.out.println(Util.getFPSAveraage());
 
         Util.delay(delay);
     }
