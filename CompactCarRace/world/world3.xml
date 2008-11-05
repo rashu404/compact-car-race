@@ -38,14 +38,9 @@
 		</terrain>
 	</terrains>
 	<models>
-		 <!-- <model src="world/data/tree1.ms3d" collidable="true">
-			<position x="-5" y="terrain-0.6" z="-30"/>
-			<scale factor="0.25"/>
-			<rotation x="0" y="0" z="0"/>
-		</model> -->
-		<model src="world/data/anim.ms3d" collidable="true">
-			<position x="-5" y="terrain-0.6" z="-30"/>
-			<scale factor="0.15"/>
+		<model src="world/data/windengine1.ms3d" collidable="true">
+			<position x="0" y="terrain-0.6" z="-60"/>
+			<scale factor="0.2"/>
 			<rotation x="0" y="0" z="0"/>
 		</model>
 	</models>
