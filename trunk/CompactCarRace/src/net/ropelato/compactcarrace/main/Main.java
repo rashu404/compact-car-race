@@ -50,7 +50,7 @@ public class Main implements FrameProcessor
         frame.setCursor(cursor);
 
         // create view
-        view = new View(frame, 1280, 800, 32, false);
+        view = new View(frame, 1280, 768, 32, false);
 
         // add view to frame
         frame.getContentPane().setBackground(Color.BLACK);
@@ -105,8 +105,8 @@ public class Main implements FrameProcessor
         // define controls
         controller = new Controller(view.getCanvas3D());
 
-        controller.addCommand("turnLeft", Controller.KEYBOARD, KeyEvent.VK_LEFT, 0, 1, false, 4, false);
-        controller.addCommand("turnRight", Controller.KEYBOARD, KeyEvent.VK_RIGHT, 0, 1, false, 4, false);
+        controller.addCommand("turnLeft", Controller.KEYBOARD, KeyEvent.VK_LEFT, 0, 1, false, 10, false);
+        controller.addCommand("turnRight", Controller.KEYBOARD, KeyEvent.VK_RIGHT, 0, 1, false, 10, false);
         controller.addCommand("forward", Controller.KEYBOARD, KeyEvent.VK_UP, 0, 1, false, 0, false);
         controller.addCommand("backward", Controller.KEYBOARD, KeyEvent.VK_DOWN, 0, 1, false, 0, false);
         controller.addCommand("changeCamera", Controller.KEYBOARD, KeyEvent.VK_C, 0, 1, false, 0, true);
@@ -176,9 +176,10 @@ public class Main implements FrameProcessor
 
         // update objects and camera
         myCar.update();
-        view.getCamera().update(world, 4, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
-        
-        System.out.println(Util.getFPSAveraage());
+        view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
+
+        // print current fps
+        //System.out.println(Util.getFPSAveraage());
 
         Util.delay(delay);
     }

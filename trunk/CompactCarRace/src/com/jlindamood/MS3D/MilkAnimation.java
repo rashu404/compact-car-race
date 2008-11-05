@@ -174,34 +174,28 @@ public class MilkAnimation extends Behavior
                 for (int s = 0; s < 3; s++)
                 { // Each tri has 3 co-ords
 
-                    try
-                    {
 
                         int coordIndex = movementFile.myTri[updatingGroup.triangleIndices[j]].vertexIndices[s];
                         currentBoneIndex = movementFile.boneID[coordIndex];
                         myCurPoint.set(movementFile.vertexes[coordIndex]);
-                        jointMovements[currentBoneIndex].transform(myCurPoint);
+                        if (currentBoneIndex >= 0 && currentBoneIndex < jointMovements.length)
+                        {
+                            jointMovements[currentBoneIndex].transform(myCurPoint);
+                        }
                         updatingGroup.myCurrentCoords[j * 9 + s * 3 + 0] = myCurPoint.x;
                         updatingGroup.myCurrentCoords[j * 9 + s * 3 + 1] = myCurPoint.y;
                         updatingGroup.myCurrentCoords[j * 9 + s * 3 + 2] = myCurPoint.z;
 
                         myCurNorm.set(movementFile.myTri[updatingGroup.triangleIndices[j]].vertexNormals[s]);
-                        jointMovements[currentBoneIndex].transform(myCurNorm);
+                        if (currentBoneIndex >= 0 && currentBoneIndex < jointMovements.length)
+                        {
+                            jointMovements[currentBoneIndex].transform(myCurNorm);
+                        }
                         updatingGroup.myCurrentNorms[j * 9 + s * 3 + 0] = myCurNorm.x;
                         updatingGroup.myCurrentNorms[j * 9 + s * 3 + 1] = myCurNorm.y;
                         updatingGroup.myCurrentNorms[j * 9 + s * 3 + 2] = myCurNorm.z;
-
-                    }
-                    catch (ArrayIndexOutOfBoundsException e)
-                    {
-                        // ignore
-                        // System.out.println("null");
-                        // e.printStackTrace();
-                    }
-
                 }
             }
-
         }
     }
 }

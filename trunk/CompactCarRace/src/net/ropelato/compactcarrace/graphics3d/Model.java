@@ -1,6 +1,5 @@
 package net.ropelato.compactcarrace.graphics3d;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -15,16 +14,17 @@ import javax.vecmath.Vector3d;
 
 import net.ropelato.compactcarrace.util.Util;
 
-import com.jlindamood.MS3D.*;
+import com.jlindamood.MS3D.MilkAnimation;
+import com.jlindamood.MS3D.MilkLoader;
 import com.sun.j3d.loaders.Scene;
 
 public class Model extends BranchGroup
 {
-    private static final BoundingSphere INFINITE_SPHERE = new BoundingSphere(new Point3d(0, 0, 0), 1000d);
-    
     TransformGroup transformGroup = null;
     Transform3D transform3D = null;
     Scene scene = null;
+    
+    ArrayList animations = new ArrayList();
 
     ArrayList collidingObjects = new ArrayList();
     boolean collision = false;
@@ -62,11 +62,6 @@ public class Model extends BranchGroup
         this.fileName = fileName;
         try
         {
-
-            /*
-             * if (fileName.toLowerCase().endsWith(".ms3d")) { Loader loader = new MS3DLoader(MS3DLoader.LOAD_ALL); File file = new java.io.File(fileName); if (file.getParent().length() > 0) { loader.setBasePath(file.getParent() + java.io.File.separator); } scene = loader.load(file.getName()); }
-             */
-
             if (fileName.toLowerCase().endsWith(".ms3d"))
             {
 
@@ -77,30 +72,19 @@ public class Model extends BranchGroup
                 
                 BranchGroup branchGroup = scene.getSceneGroup();
 
-                System.out.println(fileName + " loaded\n-----");
-
                 if (scene.getBehaviorNodes() != null)
                 {
                     for (int i = 0; i < scene.getBehaviorNodes().length; i++)
                     {
                         MilkAnimation animation = (MilkAnimation)scene.getBehaviorNodes()[i];
-                        animation.setDuration(100);
-                        animation.setSchedulingBounds(INFINITE_SPHERE);
+                        animation.setDuration(300);
+                        animation.setSchedulingBounds(new BoundingSphere(new Point3d(0, 0, 0), 10000d));
                         branchGroup.addChild(animation);
                     }
                 }
                 else
                 {
-                    System.out.println("behavior = null");
                 }
-
-                Enumeration e = scene.getSceneGroup().getAllChildren();
-                while (e.hasMoreElements())
-                {
-                    System.out.println(e.nextElement());
-                }
-
-                System.out.println("===============================");
 
                 transformGroup.addChild(branchGroup);
             }
