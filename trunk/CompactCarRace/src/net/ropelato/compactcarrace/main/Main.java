@@ -105,8 +105,8 @@ public class Main implements FrameProcessor
         // define controls
         controller = new Controller(view.getCanvas3D());
 
-        controller.addCommand("turnLeft", Controller.KEYBOARD, KeyEvent.VK_LEFT, 0, 1, false, 10, false);
-        controller.addCommand("turnRight", Controller.KEYBOARD, KeyEvent.VK_RIGHT, 0, 1, false, 10, false);
+        controller.addCommand("turnLeft", Controller.KEYBOARD, KeyEvent.VK_LEFT, 0, 1, false, 4, false);
+        controller.addCommand("turnRight", Controller.KEYBOARD, KeyEvent.VK_RIGHT, 0, 1, false, 4, false);
         controller.addCommand("forward", Controller.KEYBOARD, KeyEvent.VK_UP, 0, 1, false, 0, false);
         controller.addCommand("backward", Controller.KEYBOARD, KeyEvent.VK_DOWN, 0, 1, false, 0, false);
         controller.addCommand("changeCamera", Controller.KEYBOARD, KeyEvent.VK_C, 0, 1, false, 0, true);
