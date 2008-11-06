@@ -31,7 +31,7 @@ public class Main implements FrameProcessor
     Car myCar = null;
     Controller controller = null;
     World world = null;
-    int delay = 0;
+    int delay = 15;
     public static JFrame frame = null;
 
     private Main()
@@ -50,7 +50,7 @@ public class Main implements FrameProcessor
         frame.setCursor(cursor);
 
         // create view
-        view = new View(frame, 1280, 768, 32, false);
+        view = new View(frame, 1440, 900, 32, true);
 
         // add view to frame
         frame.getContentPane().setBackground(Color.BLACK);
@@ -179,7 +179,7 @@ public class Main implements FrameProcessor
         view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
 
         // print current fps
-        //System.out.println(Util.getFPSAveraage());
+        System.out.println(Util.getFPSAveraage());
 
         Util.delay(delay);
     }

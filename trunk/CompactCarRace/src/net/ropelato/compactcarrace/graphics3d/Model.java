@@ -77,7 +77,7 @@ public class Model extends BranchGroup
                     for (int i = 0; i < scene.getBehaviorNodes().length; i++)
                     {
                         MilkAnimation animation = (MilkAnimation)scene.getBehaviorNodes()[i];
-                        animation.setDuration(300);
+                        animation.setDuration(2000);
                         animation.setSchedulingBounds(new BoundingSphere(new Point3d(0, 0, 0), 10000d));
                         branchGroup.addChild(animation);
                     }
