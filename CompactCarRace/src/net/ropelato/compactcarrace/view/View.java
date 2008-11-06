@@ -35,11 +35,11 @@ public class View
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
             }
             
-            if (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isDisplayChangeSupported())
+            /*if (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isDisplayChangeSupported())
             {
                 DisplayMode displayMode = new DisplayMode(resolutionX, resolutionY, 32, DisplayMode.REFRESH_RATE_UNKNOWN);
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setDisplayMode(displayMode);
-            }
+            }*/
         }
         graphicsConfiguration = SimpleUniverse.getPreferredConfiguration();
         canvas3D = new MyCanvas3D(graphicsConfiguration);
