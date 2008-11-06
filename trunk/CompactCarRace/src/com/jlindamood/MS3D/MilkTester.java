@@ -27,7 +27,7 @@ public class MilkTester extends Applet
 
     private static final long serialVersionUID = -4345354147192126597L;
     private static final BoundingSphere INFINITE_SPHERE = new BoundingSphere(new Point3d(0, 0, 0), Double.MAX_VALUE);
-    final static String FILE_NAME = "world/data/boxaxis.ms3d";
+    final static String FILE_NAME = "world/data/windengine1.ms3d";
 
     public BranchGroup createSceneGraph()
     {

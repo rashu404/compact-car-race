@@ -33,7 +33,7 @@ public class Main implements FrameProcessor
     World world = null;
     int delay = 15;
     public static JFrame frame = null;
-
+    
     private Main()
     {
         // create frame
@@ -50,7 +50,7 @@ public class Main implements FrameProcessor
         frame.setCursor(cursor);
 
         // create view
-        view = new View(frame, 1440, 900, 32, true);
+        view = new View(frame, 1440, 900, 32, false);
 
         // add view to frame
         frame.getContentPane().setBackground(Color.BLACK);
@@ -119,8 +119,8 @@ public class Main implements FrameProcessor
         view.getCanvas3D().requestFocus();
 
         // prepare car
-        myCar.setPosition(-0.01f, 0f, -5f);
-        myCar.setRotation(0f, 0f, 0f);
+        myCar.setPosition(2f, 0f, 2f);
+        myCar.setRotation(0f, 180f, 0f);
         myCar.update();
         myCar.getModel().setCollision(false);
 
@@ -133,6 +133,7 @@ public class Main implements FrameProcessor
         myCar.setTacho(myTacho);
 
         view.getCamera().setTargetModel(myCar.getModel());
+        view.getCamera().update(world, 0f, 0f, false);
 
         // start FPS counter
         Util.startFPSCounter();
@@ -174,19 +175,22 @@ public class Main implements FrameProcessor
             end();
         }
 
+        //update world
+        world.update();
+        
         // update objects and camera
         myCar.update();
         view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
 
         // print current fps
-        System.out.println(Util.getFPSAveraage());
-
+        // System.out.println(Util.getFPSAveraage());
+        
         Util.delay(delay);
     }
 
     public String selectWorld()
     {
-        String worldDescriptor = "world/world3.xml";
+        String worldDescriptor = "world/world4.xml";
         return worldDescriptor;
     }
 

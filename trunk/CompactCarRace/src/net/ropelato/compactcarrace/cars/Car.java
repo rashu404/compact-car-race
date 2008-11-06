@@ -136,7 +136,7 @@ public class Car
     public void adaptToTerrain(World world)
     {
         Terrain activeTerrain;
-
+        
         float xLength = this.getWidth() * (float) (Math.cos(Math.toRadians(rotationY)) + 1) * 0.5f + this.getLength() * (float) (Math.sin(Math.toRadians(rotationY)) + 1) * 0.5f;
         float zLength = this.getLength() * (float) (Math.cos(Math.toRadians(rotationY)) + 1) * 0.5f + this.getWidth() * (float) (Math.sin(Math.toRadians(rotationY)) + 1) * 0.5f;
 
@@ -148,7 +148,7 @@ public class Car
         {
             frontY = activeTerrain.getPositionY(frontX, frontZ);
         }
-
+        
         float backX = positionX;
         float backZ = positionZ + zLength / 2;
         float backY = 0f;

@@ -276,12 +276,16 @@ public class World
         Element color = element.getChild("color");
         Element texture = element.getChild("texture");
         Element transparency = element.getChild("transparency");
+        Element lift = element.getChild("lift");
+        Element sink = element.getChild("sink");
 
         try
         {
             boolean collidable = false;
             if (element.getAttribute("collidable") != null)
+            {
                 collidable = element.getAttribute("collidable").getBooleanValue();
+            }
 
             int fieldsX = fields.getAttribute("x").getIntValue();
             int fieldsZ = fields.getAttribute("z").getIntValue();
@@ -434,6 +438,20 @@ public class World
                 }
             }
 
+            if(lift!=null)
+            {
+                float value = lift.getAttribute("value").getFloatValue();
+                float step = lift.getAttribute("step").getFloatValue();
+                terrain.setLiftValue(value);
+                terrain.setLiftStep(step);
+            }
+            
+            if(sink!=null)
+            {
+                float value = lift.getAttribute("value").getFloatValue();
+                terrain.setSink(value);
+            }
+            
             if (colorRed >= 0 && colorGreen >= 0 && colorBlue >= 0)
             {
                 Color3f terrainColor = new Color3f(new Color(colorRed, colorGreen, colorBlue));
@@ -482,15 +500,37 @@ public class World
     public Terrain getActiveTerrain(float xPosition, float zPosition)
     {
         Terrain activeTerrain = null;
+        float maxPositionY = Float.MAX_VALUE * -1;
         for (int i = 0; i < terrains.size(); i++)
         {
             Terrain terrain = (Terrain) terrains.get(i);
             if (xPosition >= terrain.getXMin() && xPosition <= terrain.getXMax() && zPosition >= terrain.getZMin() && zPosition <= terrain.getZMax())
             {
-                activeTerrain = terrain;
+                if (activeTerrain == null)
+                {
+                    activeTerrain = terrain;
+                    maxPositionY = activeTerrain.getPositionY(xPosition, zPosition);
+                }
+                else
+                {
+                    if (terrain.getPositionY(xPosition, zPosition) > maxPositionY)
+                    {
+                        activeTerrain = terrain;
+                        maxPositionY = activeTerrain.getPositionY(xPosition, zPosition);
+                    }
+                }
             }
         }
         return activeTerrain;
+    }
+    
+    public void update()
+    {
+        for(int i=0; i<terrains.size(); i++)
+        {
+            Terrain terrain = (Terrain)terrains.get(i);
+            terrain.update();
+        }
     }
 
 }

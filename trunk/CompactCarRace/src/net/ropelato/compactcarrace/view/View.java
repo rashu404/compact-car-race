@@ -1,6 +1,5 @@
 package net.ropelato.compactcarrace.view;
 
-import java.awt.DisplayMode;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
