@@ -1,5 +1,6 @@
 package net.ropelato.compactcarrace.view;
 
+import java.awt.DisplayMode;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
@@ -34,11 +35,11 @@ public class View
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
             }
             
-            /*if (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isDisplayChangeSupported())
+            if (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().isDisplayChangeSupported())
             {
-                DisplayMode displayMode = new DisplayMode(resolutionX, resolutionY, 32, DisplayMode.REFRESH_RATE_UNKNOWN);
+                DisplayMode displayMode = new DisplayMode(resolutionX, resolutionY, colorDepth, DisplayMode.REFRESH_RATE_UNKNOWN);
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setDisplayMode(displayMode);
-            }*/
+            }
         }
         graphicsConfiguration = SimpleUniverse.getPreferredConfiguration();
         canvas3D = new MyCanvas3D(graphicsConfiguration);
