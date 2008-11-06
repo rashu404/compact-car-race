@@ -10,9 +10,12 @@ import javax.media.j3d.Material;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.TexCoordGeneration;
 import javax.media.j3d.Texture;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
 import javax.media.j3d.TransparencyAttributes;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector4f;
 
 import net.ropelato.compactcarrace.main.Main;
@@ -23,6 +26,9 @@ public class Terrain extends BranchGroup
 {
     int xFields = 0;
     int zFields = 0;
+
+    TransformGroup transformGroup = null;
+    Transform3D transform3D = null;
 
     Point3f[] points = null;
     Shape3D shape3D = null;
@@ -43,9 +49,16 @@ public class Terrain extends BranchGroup
     Color3f color = null;
     String textureFileName = null;
     float visible = 1f;
-    
+
     float textureScaleX = 1f;
     float textureScaleZ = 1f;
+
+    float liftValue = 0f;
+    float liftStep = 0f;
+    float liftIndex = 0f;
+    float liftPosition = 0f;
+    
+    float sink = 0f;
 
     public Terrain(int xFields, int zFields, float xMove, float yMove, float zMove, float xScale, float yScale, float zScale)
     {
@@ -60,6 +73,17 @@ public class Terrain extends BranchGroup
         this.yMove = yMove;
         this.zMove = zMove;
 
+        transform3D = new Transform3D();
+        setPosition(xMove, yMove, zMove);
+        // transform3D.setTranslation(new Vector3f(xMove, yMove, zMove));
+        transformGroup = new TransformGroup(transform3D);
+
+        setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+
+        transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+
         xMin = xMove;
         xMax = xMove + xFields * xScale;
         zMin = zMove;
@@ -73,7 +97,7 @@ public class Terrain extends BranchGroup
         {
             for (int x = 0; x <= xFields; x++)
             {
-                Point3f point = new Point3f(xMove + 0f + x * xScale, yMove + 0f, zMove + 0f + z * zScale);
+                Point3f point = new Point3f(x * xScale, 0f, z * zScale);
                 points[count] = point;
                 count++;
             }
@@ -99,7 +123,7 @@ public class Terrain extends BranchGroup
 
     public void setCoordinates(int x, float y, int z)
     {
-        Point3f point = new Point3f((float) xMove + x * xScale, yMove + y * yScale, (float) zMove + z * zScale);
+        Point3f point = new Point3f(x * xScale, y * yScale, z * zScale);
         int index = x + z * (xFields + 1);
         points[index] = point;
     }
@@ -158,7 +182,7 @@ public class Terrain extends BranchGroup
             Texture texImage = new TextureLoader(textureFileName, Main.frame).getTexture();
 
             TexCoordGeneration tg = new TexCoordGeneration();
-            tg.setGenMode(TexCoordGeneration.TEXTURE_COORDINATE_3);
+            tg.setGenMode(TexCoordGeneration.OBJECT_LINEAR);
             tg.setPlaneS(new Vector4f((1f / textureScaleX), 0f, 0f, 0f));
             tg.setPlaneT(new Vector4f(0f, 0f, (1f / textureScaleZ), 0f));
 
@@ -174,7 +198,9 @@ public class Terrain extends BranchGroup
 
         shape3D = new Shape3D(terrain);
         shape3D.setAppearance(appearance);
-        addChild(shape3D);
+        transformGroup.addChild(shape3D);
+
+        addChild(transformGroup);
 
         compile();
     }
@@ -199,8 +225,8 @@ public class Terrain extends BranchGroup
             Point3f pointC = points[indexC];
             Point3f pointD = points[indexD];
 
-            float x = xPosition - pointA.getX();
-            float z = zPosition - pointA.getZ();
+            float x = xPosition - (pointA.getX() + xMove);
+            float z = zPosition - (pointA.getZ() + zMove);
 
             if (x >= 0 && z >= 0)
             {
@@ -219,7 +245,26 @@ public class Terrain extends BranchGroup
             }
         }
 
+        y += liftPosition;
+        y -= sink;
         return y;
+    }
+
+    public void setPosition(float positionX, float positionY, float positionZ)
+    {
+        transform3D.setTranslation(new Vector3d(positionX, positionY, positionZ));
+    }
+
+    public void update()
+    {
+        if (liftValue != 0f)
+        {
+            liftIndex += liftStep;
+            liftPosition = (float) (Math.sin(Math.toDegrees(liftIndex)) + 0.5f) * liftValue;
+            setPosition(xMove, yMove + liftPosition, zMove);
+        }
+
+        transformGroup.setTransform(transform3D);
     }
 
     public int getXFields()
@@ -270,5 +315,35 @@ public class Terrain extends BranchGroup
     public void setZMax(float max)
     {
         zMax = max;
+    }
+
+    public float getLiftValue()
+    {
+        return liftValue;
+    }
+
+    public void setLiftValue(float liftValue)
+    {
+        this.liftValue = liftValue;
+    }
+
+    public float getLiftStep()
+    {
+        return liftStep;
+    }
+
+    public void setLiftStep(float liftStep)
+    {
+        this.liftStep = liftStep;
+    }
+
+    public float getSink()
+    {
+        return sink;
+    }
+
+    public void setSink(float sink)
+    {
+        this.sink = sink;
     }
 }

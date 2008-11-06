@@ -213,7 +213,6 @@ public class Model extends BranchGroup
         {
             update();
         }
-
     }
 
     public void setScale(float scale)
@@ -311,8 +310,6 @@ public class Model extends BranchGroup
         rotationY = Util.modifyAngle(rotationY);
         rotationZ = Util.modifyAngle(rotationZ);
         transformGroup.setTransform(transform3D);
-
-        // observable.update();
     }
 
     public TransformGroup getTransformGroup()
