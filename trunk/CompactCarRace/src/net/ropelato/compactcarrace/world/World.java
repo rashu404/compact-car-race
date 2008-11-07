@@ -8,8 +8,11 @@ import java.util.Iterator;
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Fog;
+import javax.media.j3d.LinearFog;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
+import javax.vecmath.Point3f;
 
 import net.ropelato.compactcarrace.connection.FileDownloader;
 import net.ropelato.compactcarrace.graphics3d.Model;
@@ -30,6 +33,9 @@ public class World
     private BranchGroup ambientLightBG = new BranchGroup();
     private ArrayList pointLights = new ArrayList();
     private ArrayList terrains = new ArrayList();
+    private Fog fog = null;
+
+    public static BoundingSphere INFINITE_BOUNDINGSPHERE = new BoundingSphere(new Point3d(0d, 0d, 0d), Double.MAX_VALUE);
 
     public World(String fileName)
     {
@@ -54,6 +60,10 @@ public class World
                     if (element.getName().equals("pointlight"))
                     {
                         parsePointLight(element);
+                    }
+                    if (element.getName().equals("fog"))
+                    {
+                        parseFog(element);
                     }
                     if (element.getName().equals("texture"))
                     {
@@ -160,6 +170,40 @@ public class World
         catch (ClassCastException e)
         {
             e.printStackTrace();
+        }
+        catch (DataConversionException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void parseFog(Element element)
+    {
+        Element color = element.getChild("color");
+        Element distance = element.getChild("distance");
+
+        try
+        {
+            int colorRed = color.getAttribute("red").getIntValue();
+            int colorGreen = color.getAttribute("green").getIntValue();
+            int colorBlue = color.getAttribute("blue").getIntValue();
+            
+            float frontDistance = distance.getAttribute("front").getIntValue();
+            float backDistance = distance.getAttribute("back").getIntValue();
+            
+            LinearFog linearFog = new LinearFog();
+
+            Color3f fogColor = new Color3f(new Color(colorRed, colorGreen, colorBlue));
+            linearFog.setColor(fogColor);
+            linearFog.setFrontDistance(frontDistance);
+            linearFog.setBackDistance(backDistance);
+
+            linearFog.setCapability(Fog.ALLOW_COLOR_WRITE);
+            linearFog.setCapability(LinearFog.ALLOW_DISTANCE_WRITE);
+            linearFog.setInfluencingBounds(INFINITE_BOUNDINGSPHERE);
+
+            fog = linearFog;
+            
         }
         catch (DataConversionException e)
         {
@@ -438,20 +482,20 @@ public class World
                 }
             }
 
-            if(lift!=null)
+            if (lift != null)
             {
                 float value = lift.getAttribute("value").getFloatValue();
                 float step = lift.getAttribute("step").getFloatValue();
                 terrain.setLiftValue(value);
                 terrain.setLiftStep(step);
             }
-            
-            if(sink!=null)
+
+            if (sink != null)
             {
                 float value = lift.getAttribute("value").getFloatValue();
                 terrain.setSink(value);
             }
-            
+
             if (colorRed >= 0 && colorGreen >= 0 && colorBlue >= 0)
             {
                 Color3f terrainColor = new Color3f(new Color(colorRed, colorGreen, colorBlue));
@@ -497,6 +541,16 @@ public class World
         return terrains;
     }
 
+    public Fog getFog()
+    {
+        return fog;
+    }
+
+    public void setFog(Fog fog)
+    {
+        this.fog = fog;
+    }
+
     public Terrain getActiveTerrain(float xPosition, float zPosition)
     {
         Terrain activeTerrain = null;
@@ -523,12 +577,12 @@ public class World
         }
         return activeTerrain;
     }
-    
+
     public void update()
     {
-        for(int i=0; i<terrains.size(); i++)
+        for (int i = 0; i < terrains.size(); i++)
         {
-            Terrain terrain = (Terrain)terrains.get(i);
+            Terrain terrain = (Terrain) terrains.get(i);
             terrain.update();
         }
     }

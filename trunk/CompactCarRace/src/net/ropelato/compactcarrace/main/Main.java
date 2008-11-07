@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Fog;
 import javax.swing.JFrame;
 
 import net.ropelato.compactcarrace.cars.Car;
@@ -65,6 +66,14 @@ public class Main implements FrameProcessor
         // create world
         String worldDescriptor = selectWorld();
         world = new World(worldDescriptor);
+        
+        Fog fog = world.getFog();
+        if(fog!=null)
+        {
+            BranchGroup fogGroup = new BranchGroup();
+            fogGroup.addChild(fog);
+            view.addBranchGroup(fogGroup);
+        }
 
         ArrayList worldModels = world.getModels();
         for (int i = 0; i < worldModels.size(); i++)

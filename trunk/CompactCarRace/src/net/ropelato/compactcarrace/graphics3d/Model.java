@@ -13,6 +13,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import net.ropelato.compactcarrace.util.Util;
+import net.ropelato.compactcarrace.world.World;
 
 import com.jlindamood.MS3D.MilkAnimation;
 import com.jlindamood.MS3D.MilkLoader;
@@ -23,7 +24,7 @@ public class Model extends BranchGroup
     TransformGroup transformGroup = null;
     Transform3D transform3D = null;
     Scene scene = null;
-    
+
     ArrayList animations = new ArrayList();
 
     ArrayList collidingObjects = new ArrayList();
@@ -67,18 +68,18 @@ public class Model extends BranchGroup
 
                 MilkLoader loader = new MilkLoader();
                 loader.setFlags(MilkLoader.LOAD_ALL);
-                
+
                 scene = loader.load(fileName);
-                
+
                 BranchGroup branchGroup = scene.getSceneGroup();
 
                 if (scene.getBehaviorNodes() != null)
                 {
                     for (int i = 0; i < scene.getBehaviorNodes().length; i++)
                     {
-                        MilkAnimation animation = (MilkAnimation)scene.getBehaviorNodes()[i];
+                        MilkAnimation animation = (MilkAnimation) scene.getBehaviorNodes()[i];
                         animation.setDuration(2000);
-                        animation.setSchedulingBounds(new BoundingSphere(new Point3d(0, 0, 0), 10000d));
+                        animation.setSchedulingBounds(World.INFINITE_BOUNDINGSPHERE);
                         branchGroup.addChild(animation);
                     }
                 }
