@@ -3,13 +3,11 @@ package net.ropelato.compactcarrace.graphics3d;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.AxisAngle4f;
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import net.ropelato.compactcarrace.util.Util;
@@ -78,13 +76,10 @@ public class Model extends BranchGroup
                     for (int i = 0; i < scene.getBehaviorNodes().length; i++)
                     {
                         MilkAnimation animation = (MilkAnimation) scene.getBehaviorNodes()[i];
-                        animation.setDuration(2000);
+                        animation.setDuration(200);
                         animation.setSchedulingBounds(World.INFINITE_BOUNDINGSPHERE);
                         branchGroup.addChild(animation);
                     }
-                }
-                else
-                {
                 }
 
                 transformGroup.addChild(branchGroup);
@@ -342,8 +337,4 @@ public class Model extends BranchGroup
     {
         this.autoUpdate = autoUpdate;
     }
-
-    /*
-     * public Observable getObservable() { return observable; }
-     */
 }

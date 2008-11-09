@@ -131,10 +131,15 @@
 		</terrain>
 	</terrains>
 	<models>
+		<model src="world/data/barrel1.ms3d" collidable="true">
+			<position x="80" y="terrain" z="50"/>
+			<scale factor="0.1"/>
+			<rotation x="0" y="0" z="0"/>
+		</model>
 		<model src="world/data/sky1.ms3d" collidable="false">
 			<position x="0" y="-100" z="0"/>
 			<scale factor="1000"/>
 			<rotation x="0" y="0" z="0"/>
-		</model>
+		</model> 
 	</models>
 </world>

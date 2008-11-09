@@ -32,9 +32,9 @@ public class Main implements FrameProcessor
     Car myCar = null;
     Controller controller = null;
     World world = null;
-    int delay = 15;
+    int delay = 5;
     public static JFrame frame = null;
-    
+
     private Main()
     {
         // create frame
@@ -66,9 +66,9 @@ public class Main implements FrameProcessor
         // create world
         String worldDescriptor = selectWorld();
         world = new World(worldDescriptor);
-        
+
         Fog fog = world.getFog();
-        if(fog!=null)
+        if (fog != null)
         {
             BranchGroup fogGroup = new BranchGroup();
             fogGroup.addChild(fog);
@@ -101,15 +101,17 @@ public class Main implements FrameProcessor
 
         // create cars
         Model myCarModel = new Model("./cars/minicooper/minicooper1.ms3d");
-        // Model myCarModel = new Model("./cars/vespa/vespa01b.ms3d");
-        // Model myCarModel = new Model("./cars/mazda/mazda.ms3d");
-        myCar = new Car(myCarModel);
-        myCar.getModel().setCollidable(true);
+        Model myCarCollisionModel = new Model("./cars/minicooper/minicooper1_collision.ms3d");
+        myCar = new Car(myCarModel, myCarCollisionModel);
+
         view.addBranchGroup(myCar.getModel());
+        if (myCar.getCollisionModel() != null)
+        {
+            view.addBranchGroup(myCar.getCollisionModel());
+        }
 
         // setup camera
         view.getCamera().setCameraMode(Camera.THIRD_PERSON);
-        view.getCanvas3D().getGraphicsContext3D().setBufferOverride(false);
 
         // define controls
         controller = new Controller(view.getCanvas3D());
@@ -168,7 +170,16 @@ public class Main implements FrameProcessor
         }
         else
         {
-            myCar.resetCollision();
+            myCar.restore();
+            if (myCar.getSpeed() >= 0f)
+            {
+                myCar.move(-0.1f);
+            }
+            else
+            {
+                myCar.move(0.1f);
+            };
+            myCar.setSpeed(myCar.getSpeed() * -0.5f);
         }
         myCar.adaptToTerrain(world);
 
@@ -184,16 +195,16 @@ public class Main implements FrameProcessor
             end();
         }
 
-        //update world
+        // update world
         world.update();
-        
+
         // update objects and camera
         myCar.update();
         view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
 
         // print current fps
-        // System.out.println(Util.getFPSAveraage());
-        
+        System.out.println(Util.getFPSAveraage());
+
         Util.delay(delay);
     }
 
