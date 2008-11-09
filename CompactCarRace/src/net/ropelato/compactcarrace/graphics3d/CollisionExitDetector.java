@@ -18,7 +18,7 @@ public class CollisionExitDetector extends Behavior
         this.model = model;
     }
 
-    public BranchGroup getModell()
+    public BranchGroup getModel()
     {
         return model;
     }

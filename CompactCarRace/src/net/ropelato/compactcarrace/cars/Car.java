@@ -1,7 +1,8 @@
 package net.ropelato.compactcarrace.cars;
 
 import javax.media.j3d.BoundingSphere;
-import javax.vecmath.Point3d;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
 
 import net.ropelato.compactcarrace.graphics3d.CollisionEntryDetector;
 import net.ropelato.compactcarrace.graphics3d.CollisionExitDetector;
@@ -12,7 +13,11 @@ import net.ropelato.compactcarrace.world.World;
 public class Car
 {
     Model model = null;
+    Model collisionModel = null;
     Tacho tacho = null;
+
+    TransformGroup wheelTG = null;
+    Transform3D wheelT3D = null;
 
     float positionX = 0f;
     float positionY = 0f;
@@ -22,6 +27,14 @@ public class Car
     float rotationY = 0f;
     float rotationZ = 0f;
 
+    float oldPositionX = 0f;
+    float oldPositionY = 0f;
+    float oldPositionZ = 0f;
+
+    float oldRotationX = 0f;
+    float oldRotationY = 0f;
+    float oldRotationZ = 0f;
+
     float length = 2.5f;
     float width = 2f;
     float smoothMoves = 10f;
@@ -29,7 +42,7 @@ public class Car
     float targetY = 0f;
     float targetZ = 0f;
     float speed = 0f;
-    float maxTurn = 3f;
+    float maxTurn = 2f;
     float maxSpeed = 0.5f;
     float minSpeed = -0.3f;
     float maxAcceleration = 0.004f;
@@ -46,22 +59,55 @@ public class Car
 
     public Car(Model model)
     {
+        this(model, null);
+    }
+
+    public Car(Model model, Model collisionModel)
+    {
         super();
         this.model = model;
+        this.collisionModel = collisionModel;
 
-        model.setScale(0.1f);
-        model.setCollidable(true);
+        wheelT3D = new Transform3D();
+        wheelTG = new TransformGroup(wheelT3D);
 
         // setup collision detector
-        BoundingSphere collisionBounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 1000.0);
+        BoundingSphere collisionBounds = World.INFINITE_BOUNDINGSPHERE;
 
-        CollisionEntryDetector collisionEntryDetector = new CollisionEntryDetector(model);
-        collisionEntryDetector.setSchedulingBounds(collisionBounds);
-        model.addChild(collisionEntryDetector);
+        model.setScale(0.1f);
 
-        CollisionExitDetector collisionExitDetector = new CollisionExitDetector(model);
-        collisionExitDetector.setSchedulingBounds(collisionBounds);
-        model.addChild(collisionExitDetector);
+        if (collisionModel == null)
+        {
+            model.setCollidable(true);
+
+            CollisionEntryDetector collisionEntryDetector = new CollisionEntryDetector(model);
+            collisionEntryDetector.setSchedulingBounds(collisionBounds);
+            model.addChild(collisionEntryDetector);
+
+            CollisionExitDetector collisionExitDetector = new CollisionExitDetector(model);
+            collisionExitDetector.setSchedulingBounds(collisionBounds);
+            model.addChild(collisionExitDetector);
+
+        }
+        else
+        {
+            collisionModel.setScale(0.1f);
+            model.setCollidable(false);
+            collisionModel.setCollidable(false);
+
+            CollisionEntryDetector collisionEntryDetector = new CollisionEntryDetector(collisionModel);
+            collisionEntryDetector.setSchedulingBounds(collisionBounds);
+            collisionModel.addChild(collisionEntryDetector);
+
+            CollisionExitDetector collisionExitDetector = new CollisionExitDetector(collisionModel);
+            collisionExitDetector.setSchedulingBounds(collisionBounds);
+            collisionModel.addChild(collisionExitDetector);
+        }
+
+        // make wheels move
+
+       
+
     }
 
     public Tacho getTacho()
@@ -136,7 +182,7 @@ public class Car
     public void adaptToTerrain(World world)
     {
         Terrain activeTerrain;
-        
+
         float xLength = this.getWidth() * (float) (Math.cos(Math.toRadians(rotationY)) + 1) * 0.5f + this.getLength() * (float) (Math.sin(Math.toRadians(rotationY)) + 1) * 0.5f;
         float zLength = this.getLength() * (float) (Math.cos(Math.toRadians(rotationY)) + 1) * 0.5f + this.getWidth() * (float) (Math.sin(Math.toRadians(rotationY)) + 1) * 0.5f;
 
@@ -148,7 +194,7 @@ public class Car
         {
             frontY = activeTerrain.getPositionY(frontX, frontZ);
         }
-        
+
         float backX = positionX;
         float backZ = positionZ + zLength / 2;
         float backY = 0f;
@@ -185,7 +231,7 @@ public class Car
             centerY = activeTerrain.getPositionY(centerX, centerZ);
         }
 
-        //centerY = Math.max(centerY, (leftY + rightY) / 2);
+        // centerY = Math.max(centerY, (leftY + rightY) / 2);
 
         rotationX = (float) Math.toDegrees(Math.atan((frontY - backY) / zLength));
         rotationZ = (float) Math.toDegrees(Math.atan((rightY - leftY) / xLength));
@@ -228,7 +274,7 @@ public class Car
             {
                 reverse = true;
             }
-            if (speed > 0)
+            if (acceleration > 0 && speed > 0)
             {
                 reverse = false;
             }
@@ -251,6 +297,17 @@ public class Car
             }
         }
 
+        if (!isCollision())
+        {
+            oldPositionX = positionX;
+            oldPositionY = positionY;
+            oldPositionZ = positionZ;
+
+            oldRotationX = rotationX;
+            oldRotationY = rotationY;
+            oldRotationZ = rotationZ;
+        }
+
         this.move(1f / (float) Math.sqrt(1 + Math.pow(Math.tan(Math.toRadians(Math.abs(pitch))), 2d)) * speed);
 
         if (tacho != null)
@@ -264,6 +321,47 @@ public class Car
         model.setRotation(rotationX, rotationY, rotationZ);
         model.setPosition(positionX, positionY, positionZ);
         model.update();
+
+        if (collisionModel != null)
+        {
+            collisionModel.setRotation(rotationX, rotationY, rotationZ);
+            collisionModel.setPosition(positionX, positionY, positionZ);
+            collisionModel.update();
+        }
+
+        /*Scene scene = model.getScene();
+        if (scene.getBehaviorNodes() != null)
+        {
+            for (int i = 0; i < scene.getBehaviorNodes().length; i++)
+            {
+                MilkAnimation animation = (MilkAnimation) scene.getBehaviorNodes()[i];
+                // animation.setDuration(2000);
+                // animation.setSchedulingBounds(World.INFINITE_BOUNDINGSPHERE);
+                // branchGroup.addChild(animation);
+
+                //Transform3D[] jointMovements = animation.getJointMovements();
+                //System.out.println(jointMovements.length);
+
+                
+                Transform3D t3D = new Transform3D();
+                t3D.rotY(Math.toRadians(45));
+                jointMovements[0].mul(t3D);
+            }
+        }*/
+
+    }
+
+    public void restore()
+    {
+        positionX = oldPositionX;
+        positionY = oldPositionY;
+        positionZ = oldPositionZ;
+
+        rotationX = oldRotationX;
+        rotationY = oldRotationY;
+        rotationZ = oldRotationZ;
+
+        resetCollision();
     }
 
     public Model getModel()
@@ -274,6 +372,16 @@ public class Car
     public void setModel(Model model)
     {
         this.model = model;
+    }
+
+    public Model getCollisionModel()
+    {
+        return collisionModel;
+    }
+
+    public void setCollisionModel(Model collisionModel)
+    {
+        this.collisionModel = collisionModel;
     }
 
     public void turnY(float turnY)
@@ -289,12 +397,26 @@ public class Car
 
     public boolean isCollision()
     {
-        return model.isCollision();
+        if (collisionModel != null)
+        {
+            return collisionModel.isCollision();
+        }
+        else
+        {
+            return model.isCollision();
+        }
     }
 
     public void resetCollision()
     {
-        model.getCollidingObjects().clear();
+        if (collisionModel != null)
+        {
+            collisionModel.getCollidingObjects().clear();
+        }
+        else
+        {
+            model.getCollidingObjects().clear();
+        }
     }
 
     public float getSpeed()
@@ -404,4 +526,30 @@ public class Car
     {
         return reverse;
     }
+
+    public void setSpeed(float speed)
+    {
+        this.speed = speed;
+    }
+
+    public TransformGroup getWheelTG()
+    {
+        return wheelTG;
+    }
+
+    public void setWheelTG(TransformGroup wheelTG)
+    {
+        this.wheelTG = wheelTG;
+    }
+
+    public Transform3D getWheelT3D()
+    {
+        return wheelT3D;
+    }
+
+    public void setWheelT3D(Transform3D wheelT3D)
+    {
+        this.wheelT3D = wheelT3D;
+    }
+
 }

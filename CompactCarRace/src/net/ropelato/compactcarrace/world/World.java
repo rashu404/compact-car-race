@@ -12,7 +12,6 @@ import javax.media.j3d.Fog;
 import javax.media.j3d.LinearFog;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 
 import net.ropelato.compactcarrace.connection.FileDownloader;
 import net.ropelato.compactcarrace.graphics3d.Model;

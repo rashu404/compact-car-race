@@ -28,7 +28,7 @@ public class MilkAnimation extends Behavior
     int currentFrame;
     float changeAmnt;
     Transform3D tempUnSyncd = new Transform3D();
-
+    
     MilkAnimation(MilkFile movementFile, int startFrame, int endFrame, int duration)
     {
         this.maxFrame = endFrame;
@@ -49,6 +49,11 @@ public class MilkAnimation extends Behavior
         toUpdate = new SyncedGeometryUpdate();
         this.setUserData("Exact Animation");
         this.setEnable(true);
+    }
+    
+    public Transform3D[] getJointMovements()
+    {
+        return jointMovements;
     }
 
     public void initialize()
