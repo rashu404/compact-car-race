@@ -273,7 +273,7 @@ public class World
 
             Model model = null;
 
-            for (int i = 0; i < models.size() && model == null; i++)
+            /*for (int i = 0; i < models.size() && model == null; i++)
             {
                 Model oldModel = (Model) models.get(i);
 
@@ -283,7 +283,7 @@ public class World
                     model.restore();
                     model.update();
                 }
-            }
+            }*/
             if (model == null)
             {
                 if (!new File(fileName).exists())

@@ -96,6 +96,12 @@ public class Model extends BranchGroup
             e.printStackTrace();
         }
     }
+    
+    public Node cloneTree(boolean b)
+    {
+        
+        return super.cloneNode(b);
+    }
 
     public Object clone()
     {
@@ -106,7 +112,8 @@ public class Model extends BranchGroup
         while (e.hasMoreElements())
         {
             Node node = (Node) e.nextElement();
-            Node cloneNode = node.cloneTree(true);
+            //Node cloneNode = node.cloneTree(true);
+            Node cloneNode = node.cloneNode(false);
             cloneTransformGroup.addChild(cloneNode);
         }
         cloneTransformGroup.setCollidable(transformGroup.getCollidable());

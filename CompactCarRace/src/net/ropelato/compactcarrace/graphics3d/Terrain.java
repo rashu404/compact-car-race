@@ -57,7 +57,7 @@ public class Terrain extends BranchGroup
     float liftStep = 0f;
     float liftIndex = 0f;
     float liftPosition = 0f;
-    
+
     float sink = 0f;
 
     public Terrain(int xFields, int zFields, float xMove, float yMove, float zMove, float xScale, float yScale, float zScale)
@@ -245,6 +245,7 @@ public class Terrain extends BranchGroup
             }
         }
 
+        y += yMove;
         y += liftPosition;
         y -= sink;
         return y;
