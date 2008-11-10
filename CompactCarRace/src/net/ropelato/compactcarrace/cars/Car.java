@@ -1,7 +1,14 @@
 package net.ropelato.compactcarrace.cars;
 
+import java.io.File;
+import java.util.Iterator;
+
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.Transform3D;
+
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
 
 import net.ropelato.compactcarrace.graphics3d.CollisionEntryDetector;
 import net.ropelato.compactcarrace.graphics3d.CollisionExitDetector;
@@ -66,14 +73,77 @@ public class Car
     int backLeftWheel = 5;
     int backRightWheel = 6;
 
-    public Car(Model model)
+    public Car(String fileName)
     {
-        this(model, null);
+        try
+        {
+            SAXBuilder builder = new SAXBuilder();
+            Document doc = builder.build(new File(fileName));
+
+            Element root = doc.getRootElement();
+            Iterator it = root.getDescendants();
+            while (it.hasNext())
+            {
+                Object obj = it.next();
+                if (obj instanceof Element)
+                {
+                    Element element = (Element) obj;
+
+                    if (element.getName().equals("models"))
+                    {
+                        parseModel(element);
+                    }
+                    if (element.getName().equals("tacho"))
+                    {
+                        parseTacho(element);
+                    }
+                    if (element.getName().equals("values"))
+                    {
+                        parseValues(element);
+                    }
+                    if (element.getName().equals("joints"))
+                    {
+                        parseJoints(element);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
-    public Car(Model model, Model collisionModel)
+    public void parseModel(Element element)
     {
-        super();
+        Element modelElement = element.getChild("model");
+        Element collisionModelElement = element.getChild("collisionModel");
+
+        if (collisionModelElement != null)
+        {
+            setup(new Model(modelElement.getAttributeValue("fileName")), new Model(collisionModelElement.getAttributeValue("fileName")));
+        }
+        else
+        {
+            setup(new Model(modelElement.getAttributeValue("fileName")), null);
+        }
+    }
+
+    public void parseTacho(Element element)
+    {
+        Element face = element.getChild("face");
+        Element pointer = element.getChild("pointer");
+
+        new Tacho(face.getAttributeValue("fileName"), pointer.getAttributeValue("fileName"));
+    }
+    
+    public void parseValues(Element element)
+    {
+        
+    }
+
+    private void setup(Model model, Model collisionModel)
+    {
         this.model = model;
         this.collisionModel = collisionModel;
 
