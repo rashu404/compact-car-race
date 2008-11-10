@@ -52,7 +52,7 @@ public class Main implements FrameProcessor
         frame.setCursor(cursor);
 
         // create view
-        view = new View(frame, 1440, 900, 32, false);
+        view = new View(frame, 1440, 900, 32, true);
 
         // add view to frame
         frame.getContentPane().setBackground(Color.BLACK);

@@ -57,6 +57,8 @@ public class Car
     float stdDeceleration = 0.002f;
     float pitchInfluence = 0.00021f;
     float acceleration = 0f;
+    
+    float tachoRotation = 100f;
 
     float cameraHeight = 1.2f;
 
@@ -75,6 +77,9 @@ public class Car
     int frontRightWheel = 3;
     int backLeftWheel = 5;
     int backRightWheel = 6;
+    
+    float wheelsSpeed = -50f;
+    float wheelsTurn = 10f;
 
     public Car(String fileName)
     {
@@ -132,12 +137,14 @@ public class Car
         }
     }
 
-    private void parseTacho(Element element)
+    private void parseTacho(Element element) throws DataConversionException
     {
         Element face = element.getChild("face");
         Element pointer = element.getChild("pointer");
+        Element rotation = element.getChild("rotation");
 
         this.tacho = new Tacho(face.getAttributeValue("fileName"), pointer.getAttributeValue("fileName"));
+        this.tachoRotation = rotation.getAttribute("factor").getFloatValue();
     }
 
     private void parseValues(Element element) throws DataConversionException
@@ -147,6 +154,7 @@ public class Car
         Element bounds = element.getChild("bounds");
         Element pitch = element.getChild("pitch");
         Element camera = element.getChild("camera");
+        Element wheels = element.getChild("wheels");
 
         this.length = size.getAttribute("length").getFloatValue();
         this.width = size.getAttribute("width").getFloatValue();
@@ -161,6 +169,9 @@ public class Car
 
         this.pitchInfluence = pitch.getAttribute("influence").getFloatValue();
         this.cameraHeight = camera.getAttribute("height").getFloatValue();
+        
+        this.wheelsSpeed = wheels.getAttribute("speed").getFloatValue();
+        this.wheelsTurn = wheels.getAttribute("turn").getFloatValue();
 
         if (model != null)
         {
@@ -420,7 +431,7 @@ public class Car
 
         if (tacho != null)
         {
-            tacho.rotatePointer(Math.abs(speed) * 100);
+            tacho.rotatePointer(Math.abs(speed) * tachoRotation);
         }
     }
 
@@ -449,13 +460,13 @@ public class Car
             model.getJoint(backRightWheel).getLocalRefMatrix().mulInverse(wheelsTransform);
         }
 
-        wheelsRotation += speed * -50f;
+        wheelsRotation += speed * wheelsSpeed;
 
         wheelsTransform = new Transform3D();
         wheelsTransform.rotX(Math.toRadians(wheelsRotation));
 
         frontWheelsTransform = new Transform3D();
-        frontWheelsTransform.rotY(Math.toRadians(steer * 10));
+        frontWheelsTransform.rotY(Math.toRadians(steer * wheelsTurn));
 
         frontWheelsTransform.mul(wheelsTransform);
 
