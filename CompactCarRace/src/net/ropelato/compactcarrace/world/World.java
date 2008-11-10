@@ -292,9 +292,9 @@ public class World
                 }
                 model = new Model(fileName);
             }
+            model.setScale(scaleFactor);
             model.setPosition(positionX, positionY, positionZ);
             model.setRotation(rotationX, rotationY, rotationZ);
-            model.setScale(scaleFactor);
             model.setCollidable(collidable);
             model.update();
             models.add(model);

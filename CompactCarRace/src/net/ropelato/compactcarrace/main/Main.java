@@ -101,9 +101,7 @@ public class Main implements FrameProcessor
         }
 
         // create cars
-        Model myCarModel = new Model("./cars/minicooper/minicooper1.ms3d");
-        Model myCarCollisionModel = new Model("./cars/minicooper/minicooper1_collision.ms3d");
-        myCar = new Car(myCarModel, myCarCollisionModel);
+        myCar = new Car("./cars/minicooper.xml");
 
         view.addBranchGroup(myCar.getModel());
         if (myCar.getCollisionModel() != null)
@@ -113,6 +111,7 @@ public class Main implements FrameProcessor
 
         // setup camera
         view.getCamera().setCameraMode(Camera.THIRD_PERSON);
+        view.getCamera().setHigherThanTargetModel(myCar.getCameraHeight());
 
         // define controls
         controller = new Controller(view.getCanvas3D());
@@ -137,7 +136,8 @@ public class Main implements FrameProcessor
         myCar.getModel().setCollision(false);
 
         // prepare tacho
-        Tacho myTacho = new Tacho("./cars/minicooper/img/minicooper_tacho.png", "./cars/minicooper/img/minicooper_tacho_pointer.png", view.getCanvas3D());
+        Tacho myTacho = myCar.getTacho();
+        myTacho.setImageObserver(view.getCanvas3D());
         myTacho.setPositionX(view.getCanvas3D().getWidth() - 119 - 10);
         myTacho.setPositionY(view.getCanvas3D().getHeight() - 122 - 10);
         ((MyCanvas3D) view.getCanvas3D()).addPaintComponent(myTacho);

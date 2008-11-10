@@ -308,4 +308,14 @@ public class Camera
             setPosition(positionX, positionY + cameraHeight, positionZ);
         }
     }
+
+    public float getHigherThanTargetModel()
+    {
+        return higherThanTargetModel;
+    }
+
+    public void setHigherThanTargetModel(float higherThanTargetModel)
+    {
+        this.higherThanTargetModel = higherThanTargetModel;
+    }
 }
