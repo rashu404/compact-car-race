@@ -219,8 +219,6 @@ public class Main implements FrameProcessor
             delay = 0;
         }
         Util.delay(delay);
-        
-        System.out.println(averageFPS);
     }
 
     public String selectWorld()
