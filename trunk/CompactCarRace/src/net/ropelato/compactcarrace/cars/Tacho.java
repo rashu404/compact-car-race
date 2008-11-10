@@ -19,12 +19,11 @@ public class Tacho implements PaintComponent
     int positionX = 0;
     int positionY = 0;
 
-    public Tacho(String tachoImage, String pointerImage, ImageObserver imageObserver)
+    public Tacho(String tachoImage, String pointerImage)
     {
         tacho = Util.loadImage(new File(tachoImage));
         tachoPointer = Util.loadImage(new File(pointerImage));
 
-        this.imageObserver = imageObserver;
         pointerTransform = new AffineTransform();
     }
 
@@ -61,5 +60,15 @@ public class Tacho implements PaintComponent
     public void setPositionY(int positionY)
     {
         this.positionY = positionY;
+    }
+
+    public ImageObserver getImageObserver()
+    {
+        return imageObserver;
+    }
+
+    public void setImageObserver(ImageObserver imageObserver)
+    {
+        this.imageObserver = imageObserver;
     }
 }

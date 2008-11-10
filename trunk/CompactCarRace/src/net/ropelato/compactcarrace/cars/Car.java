@@ -6,6 +6,7 @@ import java.util.Iterator;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.Transform3D;
 
+import org.jdom.DataConversionException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -56,6 +57,8 @@ public class Car
     float stdDeceleration = 0.002f;
     float pitchInfluence = 0.00021f;
     float acceleration = 0f;
+
+    float cameraHeight = 1.2f;
 
     Transform3D wheelsTransform = null;
     Transform3D frontWheelsTransform = null;
@@ -108,16 +111,16 @@ public class Car
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            ex.printStackTrace();
+            e.printStackTrace();
         }
     }
 
-    public void parseModel(Element element)
+    private void parseModel(Element element)
     {
         Element modelElement = element.getChild("model");
-        Element collisionModelElement = element.getChild("collisionModel");
+        Element collisionModelElement = element.getChild("collisionmodel");
 
         if (collisionModelElement != null)
         {
@@ -129,17 +132,54 @@ public class Car
         }
     }
 
-    public void parseTacho(Element element)
+    private void parseTacho(Element element)
     {
         Element face = element.getChild("face");
         Element pointer = element.getChild("pointer");
 
-        new Tacho(face.getAttributeValue("fileName"), pointer.getAttributeValue("fileName"));
+        this.tacho = new Tacho(face.getAttributeValue("fileName"), pointer.getAttributeValue("fileName"));
+    }
+
+    private void parseValues(Element element) throws DataConversionException
+    {
+        Element size = element.getChild("size");
+        Element scaleElement = element.getChild("scale");
+        Element bounds = element.getChild("bounds");
+        Element pitch = element.getChild("pitch");
+        Element camera = element.getChild("camera");
+
+        this.length = size.getAttribute("length").getFloatValue();
+        this.width = size.getAttribute("width").getFloatValue();
+        this.scale = scaleElement.getAttribute("factor").getFloatValue();
+
+        this.maxTurn = bounds.getAttribute("maxTurn").getFloatValue();
+        this.maxSpeed = bounds.getAttribute("maxSpeed").getFloatValue();
+        this.minSpeed = bounds.getAttribute("minSpeed").getFloatValue();
+        this.maxAcceleration = bounds.getAttribute("maxAcceleration").getFloatValue();
+        this.maxDeceleration = bounds.getAttribute("maxDeceleration").getFloatValue();
+        this.stdDeceleration = bounds.getAttribute("stdDeceleration").getFloatValue();
+
+        this.pitchInfluence = pitch.getAttribute("influence").getFloatValue();
+        this.cameraHeight = camera.getAttribute("height").getFloatValue();
+
+        if (model != null)
+        {
+            model.setScale(scale);
+        }
+        if (collisionModel != null)
+        {
+            collisionModel.setScale(scale);
+        }
     }
     
-    public void parseValues(Element element)
+    private void parseJoints(Element element) throws DataConversionException
     {
+        Element jointIndex = element.getChild("jointindex");
         
+        this.frontLeftWheel = jointIndex.getAttribute("frontLeftWheel").getIntValue();
+        this.frontRightWheel = jointIndex.getAttribute("frontRightWheel").getIntValue();
+        this.backLeftWheel = jointIndex.getAttribute("backLeftWheel").getIntValue();
+        this.backRightWheel = jointIndex.getAttribute("backRightWheel").getIntValue();
     }
 
     private void setup(Model model, Model collisionModel)
@@ -149,8 +189,6 @@ public class Car
 
         // setup collision detector
         BoundingSphere collisionBounds = World.INFINITE_BOUNDINGSPHERE;
-
-        model.setScale(scale);
 
         if (collisionModel == null)
         {
@@ -167,7 +205,6 @@ public class Car
         }
         else
         {
-            collisionModel.setScale(scale);
             model.setCollidable(false);
             collisionModel.setCollidable(false);
 
@@ -611,4 +648,13 @@ public class Car
         this.speed = speed;
     }
 
+    public float getCameraHeight()
+    {
+        return cameraHeight;
+    }
+
+    public void setCameraHeight(float cameraHeight)
+    {
+        this.cameraHeight = cameraHeight;
+    }
 }
