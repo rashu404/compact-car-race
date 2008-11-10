@@ -28,7 +28,7 @@ public class Camera
     float cameraHeight = 3f;
     float centerAboveTarget = 2f;
 
-    float higherThanTargetModel = 1.5f;
+    float higherThanTargetModel = 1.2f;
 
     public static int STATIC = 0;
     public static int THIRD_PERSON = 1;

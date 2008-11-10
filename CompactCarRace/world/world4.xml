@@ -114,16 +114,16 @@
 		
 		<terrain collidable="false">
 			<fields x="1" z="1" />
-			<position x="-25000" y="0" z="-25000" />
-			<scale x="50000" y="1" z="50000" />
+			<position x="-10000" y="0" z="-10000" />
+			<scale x="20000" y="1" z="20000" />
 			<texture src="world/data/textures/sand3.jpg" x="100" z="100" />
 			<transparency visible="1" />
 			<set x="0-1" z="0-1" height="-4"/>
 		</terrain>
 		<terrain collidable="false">
 			<fields x="1" z="1" />
-			<position x="-25000" y="0" z="-25000" />
-			<scale x="50000" y="1" z="50000" />
+			<position x="-10000" y="0" z="-10000" />
+			<scale x="20000" y="1" z="20000" />
 			<texture src="world/data/textures/water1.jpg" x="100" z="100" />
 			<transparency visible="0.4" />
 			<lift value="0.4" step="0.0003" />

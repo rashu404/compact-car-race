@@ -1,14 +1,7 @@
 package net.ropelato.compactcarrace.cars;
 
-import java.util.Enumeration;
-
-import javax.media.j3d.Behavior;
 import javax.media.j3d.BoundingSphere;
-import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransformGroup;
-
-import com.jlindamood.MS3D.*;
 
 import net.ropelato.compactcarrace.graphics3d.CollisionEntryDetector;
 import net.ropelato.compactcarrace.graphics3d.CollisionExitDetector;
@@ -241,8 +234,8 @@ public class Car
 
         // centerY = Math.max(centerY, (leftY + rightY) / 2);
 
-        rotationX = (float) Math.toDegrees(Math.atan((frontY - backY) / zLength));
-        rotationZ = (float) Math.toDegrees(Math.atan((rightY - leftY) / xLength));
+        rotationX = (rotationX * smoothMoves + (float) Math.toDegrees(Math.atan((frontY - backY) / zLength))) / (smoothMoves + 1f);
+        rotationZ = (rotationZ * smoothMoves + (float) Math.toDegrees(Math.atan((rightY - leftY) / xLength))) / (smoothMoves + 1f);
 
         pitch = rotationX * (float) Math.cos(Math.toRadians(rotationY)) - rotationZ * (float) Math.sin(Math.toRadians(rotationY));
         roll = -rotationZ * (float) Math.cos(Math.toRadians(rotationY)) - rotationX * (float) Math.sin(Math.toRadians(rotationY));
