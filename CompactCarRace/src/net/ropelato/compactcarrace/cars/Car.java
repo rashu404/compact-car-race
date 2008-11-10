@@ -1,8 +1,14 @@
 package net.ropelato.compactcarrace.cars;
 
+import java.util.Enumeration;
+
+import javax.media.j3d.Behavior;
 import javax.media.j3d.BoundingSphere;
+import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+
+import com.jlindamood.MS3D.*;
 
 import net.ropelato.compactcarrace.graphics3d.CollisionEntryDetector;
 import net.ropelato.compactcarrace.graphics3d.CollisionExitDetector;
@@ -16,8 +22,7 @@ public class Car
     Model collisionModel = null;
     Tacho tacho = null;
 
-    TransformGroup wheelTG = null;
-    Transform3D wheelT3D = null;
+    Transform3D[] jointMovements = null;
 
     float positionX = 0f;
     float positionY = 0f;
@@ -37,6 +42,7 @@ public class Car
 
     float length = 2.5f;
     float width = 2f;
+    float scale = 0.12f;
     float smoothMoves = 10f;
     float targetX = 0f;
     float targetY = 0f;
@@ -51,11 +57,21 @@ public class Car
     float pitchInfluence = 0.00021f;
     float acceleration = 0f;
 
+    Transform3D wheelsTransform = null;
+    Transform3D frontWheelsTransform = null;
+
     float steer = 0f;
     float pitch = 0f;
     float roll = 0f;
 
     boolean reverse = false;
+
+    float wheelsRotation = 0f;
+
+    int frontLeftWheel = 2;
+    int frontRightWheel = 3;
+    int backLeftWheel = 5;
+    int backRightWheel = 6;
 
     public Car(Model model)
     {
@@ -68,13 +84,10 @@ public class Car
         this.model = model;
         this.collisionModel = collisionModel;
 
-        wheelT3D = new Transform3D();
-        wheelTG = new TransformGroup(wheelT3D);
-
         // setup collision detector
         BoundingSphere collisionBounds = World.INFINITE_BOUNDINGSPHERE;
 
-        model.setScale(0.1f);
+        model.setScale(scale);
 
         if (collisionModel == null)
         {
@@ -91,7 +104,7 @@ public class Car
         }
         else
         {
-            collisionModel.setScale(0.1f);
+            collisionModel.setScale(scale);
             model.setCollidable(false);
             collisionModel.setCollidable(false);
 
@@ -103,11 +116,6 @@ public class Car
             collisionExitDetector.setSchedulingBounds(collisionBounds);
             collisionModel.addChild(collisionExitDetector);
         }
-
-        // make wheels move
-
-       
-
     }
 
     public Tacho getTacho()
@@ -329,25 +337,33 @@ public class Car
             collisionModel.update();
         }
 
-        /*Scene scene = model.getScene();
-        if (scene.getBehaviorNodes() != null)
+        // turn wheels
+        if (frontWheelsTransform != null)
         {
-            for (int i = 0; i < scene.getBehaviorNodes().length; i++)
-            {
-                MilkAnimation animation = (MilkAnimation) scene.getBehaviorNodes()[i];
-                // animation.setDuration(2000);
-                // animation.setSchedulingBounds(World.INFINITE_BOUNDINGSPHERE);
-                // branchGroup.addChild(animation);
+            model.getJoint(frontLeftWheel).getLocalRefMatrix().mulInverse(frontWheelsTransform);
+            model.getJoint(frontRightWheel).getLocalRefMatrix().mulInverse(frontWheelsTransform);
+        }
+        if (wheelsTransform != null)
+        {
+            model.getJoint(backLeftWheel).getLocalRefMatrix().mulInverse(wheelsTransform);
+            model.getJoint(backRightWheel).getLocalRefMatrix().mulInverse(wheelsTransform);
+        }
 
-                //Transform3D[] jointMovements = animation.getJointMovements();
-                //System.out.println(jointMovements.length);
+        wheelsRotation += speed * -50f;
 
-                
-                Transform3D t3D = new Transform3D();
-                t3D.rotY(Math.toRadians(45));
-                jointMovements[0].mul(t3D);
-            }
-        }*/
+        wheelsTransform = new Transform3D();
+        wheelsTransform.rotX(Math.toRadians(wheelsRotation));
+
+        frontWheelsTransform = new Transform3D();
+        frontWheelsTransform.rotY(Math.toRadians(steer * 10));
+
+        frontWheelsTransform.mul(wheelsTransform);
+
+        model.getJoint(frontLeftWheel).getLocalRefMatrix().mul(frontWheelsTransform);
+        model.getJoint(frontRightWheel).getLocalRefMatrix().mul(frontWheelsTransform);
+
+        model.getJoint(backLeftWheel).getLocalRefMatrix().mul(wheelsTransform);
+        model.getJoint(backRightWheel).getLocalRefMatrix().mul(wheelsTransform);
 
     }
 
@@ -530,26 +546,6 @@ public class Car
     public void setSpeed(float speed)
     {
         this.speed = speed;
-    }
-
-    public TransformGroup getWheelTG()
-    {
-        return wheelTG;
-    }
-
-    public void setWheelTG(TransformGroup wheelTG)
-    {
-        this.wheelTG = wheelTG;
-    }
-
-    public Transform3D getWheelT3D()
-    {
-        return wheelT3D;
-    }
-
-    public void setWheelT3D(Transform3D wheelT3D)
-    {
-        this.wheelT3D = wheelT3D;
     }
 
 }

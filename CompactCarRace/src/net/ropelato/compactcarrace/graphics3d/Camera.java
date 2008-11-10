@@ -236,8 +236,8 @@ public class Camera
             {
                 distance = (float) Math.sqrt(((targetModel.getPositionX() - positionX) * (targetModel.getPositionX() - positionX)) + ((targetModel.getPositionZ() - positionZ) * (targetModel.getPositionZ() - positionZ)));
 
-                float targetRotationX = (float) Math.cos(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY() - centerAboveTarget) / (distance))) * -1;
-                float targetRotationZ = (float) Math.sin(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY() - centerAboveTarget) / (distance)));
+                float targetRotationX = (float) Math.cos(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY()) / (distance))) * -1;
+                float targetRotationZ = (float) Math.sin(Math.toRadians(getRotationY())) * (float) Math.toDegrees(Math.atan((getPositionY() - targetModel.getPositionY()) / (distance)));
 
                 if (targetModel.getPositionZ() - getPositionZ() != 0f)
                 {
@@ -301,6 +301,11 @@ public class Camera
         if (cameraMode > MAX_PERSPECTIVE_ID)
         {
             cameraMode = 0;
+        }
+
+        if (cameraMode == STATIC)
+        {
+            setPosition(positionX, positionY + cameraHeight, positionZ);
         }
     }
 }
