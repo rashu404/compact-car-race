@@ -14,6 +14,7 @@ import net.ropelato.compactcarrace.util.Util;
 import net.ropelato.compactcarrace.world.World;
 
 import com.jlindamood.MS3D.MilkAnimation;
+import com.jlindamood.MS3D.MilkJoint;
 import com.jlindamood.MS3D.MilkLoader;
 import com.sun.j3d.loaders.Scene;
 
@@ -24,6 +25,7 @@ public class Model extends BranchGroup
     Scene scene = null;
 
     ArrayList animations = new ArrayList();
+    MilkJoint[] joints = null;
 
     ArrayList collidingObjects = new ArrayList();
     boolean collision = false;
@@ -76,9 +78,13 @@ public class Model extends BranchGroup
                     for (int i = 0; i < scene.getBehaviorNodes().length; i++)
                     {
                         MilkAnimation animation = (MilkAnimation) scene.getBehaviorNodes()[i];
+                        animations.add(animation);
                         animation.setDuration(200);
                         animation.setSchedulingBounds(World.INFINITE_BOUNDINGSPHERE);
                         branchGroup.addChild(animation);
+
+                        joints = animation.getMilkJoints();
+
                     }
                 }
 
@@ -336,5 +342,27 @@ public class Model extends BranchGroup
     public void setAutoUpdate(boolean autoUpdate)
     {
         this.autoUpdate = autoUpdate;
+    }
+
+    public ArrayList getAnimations()
+    {
+        return animations;
+    }
+
+    public MilkJoint[] getJoints()
+    {
+        return joints;
+    }
+
+    public MilkJoint getJoint(int index)
+    {
+        if (joints != null && index > 0 && index < joints.length)
+        {
+            return joints[index];
+        }
+        else
+        {
+            return null;
+        }
     }
 }

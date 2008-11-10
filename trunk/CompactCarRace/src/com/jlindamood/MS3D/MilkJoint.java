@@ -7,7 +7,7 @@ import javax.vecmath.Vector3f;
 /**
  * Created by IntelliJ IDEA. Programmer: Jack Lindamood Date: Apr 18, 2004 Time: 5:52:37 PM
  */
-class MilkJoint
+public class MilkJoint
 {
     String name;
     int parentIndex;
@@ -26,6 +26,16 @@ class MilkJoint
     public String toString()
     {
         return "MilkJoint{" + ", name='" + name + '\'' + ", parentIndex=" + parentIndex + '}';
+    }
+    
+    public Transform3D getLocalRefMatrix()
+    {
+        return localRefMatrix;
+    }
+
+    public void setLocalRefMatrix(Transform3D localRefMatrix)
+    {
+        this.localRefMatrix = localRefMatrix;
     }
 
     private void processMe()

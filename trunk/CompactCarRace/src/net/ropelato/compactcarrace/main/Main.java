@@ -33,6 +33,7 @@ public class Main implements FrameProcessor
     Controller controller = null;
     World world = null;
     int delay = 5;
+    int targetFPS = 50;
     public static JFrame frame = null;
 
     private Main()
@@ -173,11 +174,11 @@ public class Main implements FrameProcessor
             myCar.restore();
             if (myCar.getSpeed() >= 0f)
             {
-                myCar.move(-0.1f);
+                myCar.move(-0.2f);
             }
             else
             {
-                myCar.move(0.1f);
+                myCar.move(0.2f);
             };
             myCar.setSpeed(myCar.getSpeed() * -0.5f);
         }
@@ -203,9 +204,23 @@ public class Main implements FrameProcessor
         view.getCamera().update(world, 10, Math.abs(myCar.getSpeed()) * 5f, myCar.isReverse());
 
         // print current fps
-        System.out.println(Util.getFPSAveraage());
-
+        int averageFPS = (int) Util.getFPS();
+        if (averageFPS > targetFPS)
+        {
+            delay++;
+        }
+        // print current fps
+        if (averageFPS < targetFPS)
+        {
+            delay--;
+        }
+        if (delay < 0)
+        {
+            delay = 0;
+        }
         Util.delay(delay);
+        
+        System.out.println(averageFPS);
     }
 
     public String selectWorld()

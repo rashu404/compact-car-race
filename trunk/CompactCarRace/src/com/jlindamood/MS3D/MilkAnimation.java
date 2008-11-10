@@ -28,11 +28,14 @@ public class MilkAnimation extends Behavior
     int currentFrame;
     float changeAmnt;
     Transform3D tempUnSyncd = new Transform3D();
+    MilkJoint[] milkJoints;
     
     MilkAnimation(MilkFile movementFile, int startFrame, int endFrame, int duration)
     {
         this.maxFrame = endFrame;
         whenToWake = new WakeupOnElapsedFrames(5);
+        
+        milkJoints = movementFile.myJoints;
 
         this.setUserData("Exact MS aniamtion");
         this.movementFile = movementFile;
@@ -141,6 +144,16 @@ public class MilkAnimation extends Behavior
     public long getDuration()
     {
         return this.duration;
+    }
+    
+    public MilkJoint[] getMilkJoints()
+    {
+        return milkJoints;
+    }
+
+    public void setMilkJoints(MilkJoint[] milkJoints)
+    {
+        this.milkJoints = milkJoints;
     }
 
     /**
