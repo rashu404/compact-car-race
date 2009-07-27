@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <world>
 	<light>
 		<ambientlight>
@@ -137,12 +136,8 @@
 			<scale x="6.7" y="1" z="8" />
 			<transparency visible="0" />
 		</terrain>
-		
-		
-		
 	</terrains>
 	<models>
-	
 		<model src="world/data/landingstage1.ms3d" collidable="true">
 			<position x="40" y="1.5" z="60"/>
 			<scale factor="0.31"/>
