@@ -5,6 +5,7 @@
 	<classpathentry kind="lib" path="lib/j3dcore.jar"/>
 	<classpathentry kind="lib" path="lib/j3dutils.jar"/>
 	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/milkloader.jar"/>
 	<classpathentry kind="lib" path="lib/ms3dloader.jar"/>
 	<classpathentry kind="lib" path="lib/mysqlconnector.jar"/>
 	<classpathentry kind="lib" path="lib/vecmath.jar"/>
