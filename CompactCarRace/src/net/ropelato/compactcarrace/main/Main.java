@@ -130,8 +130,8 @@ public class Main implements FrameProcessor
         view.getCanvas3D().requestFocus();
 
         // prepare car
-        myCar.setPosition(2f, 0f, 2f);
-        myCar.setRotation(0f, 180f, 0f);
+        myCar.setPosition(0.1f, 0f, -10f);
+        myCar.setRotation(0f, 0f, 0f);
         myCar.update();
         myCar.getModel().setCollision(false);
 
@@ -223,7 +223,7 @@ public class Main implements FrameProcessor
 
     public String selectWorld()
     {
-        String worldDescriptor = "world/world4.xml";
+        String worldDescriptor = "world/test1_windengine.xml";
         return worldDescriptor;
     }
 
