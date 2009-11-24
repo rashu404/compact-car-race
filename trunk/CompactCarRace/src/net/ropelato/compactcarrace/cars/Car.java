@@ -25,9 +25,9 @@ public class Car
 
     Transform3D[] jointMovements = null;
 
-    float positionX = 0f;
+    float positionX = -0f;
     float positionY = 0f;
-    float positionZ = 0f;
+    float positionZ = -0f;
 
     float rotationX = 0f;
     float rotationY = 0f;
