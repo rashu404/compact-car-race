@@ -31,13 +31,17 @@ public class Main implements FrameProcessor
     View view = null;
     Car myCar = null;
     Controller controller = null;
+    String args[] = null;
     World world = null;
     int delay = 5;
-    int targetFPS = 50;
+    int targetFPS = 80;
     public static JFrame frame = null;
 
-    private Main()
+    private Main(String[] args)
     {
+        // save args
+        this.args = args;
+        
         // create frame
         frame = new JFrame();
         frame.setTitle("Compact Car Race");
@@ -130,8 +134,8 @@ public class Main implements FrameProcessor
         view.getCanvas3D().requestFocus();
 
         // prepare car
-        myCar.setPosition(0.1f, 0f, -10f);
-        myCar.setRotation(0f, 0f, 0f);
+        myCar.setPosition(14, 0f, 63.8f);
+        myCar.setRotation(0f, 270f, 0f);
         myCar.update();
         myCar.getModel().setCollision(false);
 
@@ -219,11 +223,19 @@ public class Main implements FrameProcessor
             delay = 0;
         }
         Util.delay(delay);
+        System.out.println(averageFPS+" "+delay);
+        //System.out.println(myCar.getPositionX()+" "+myCar.getPositionY()+" "+myCar.getPositionZ());
     }
-
+    
     public String selectWorld()
     {
         String worldDescriptor = "world/test1_windengine.xml";
+        
+        if(args!=null && args.length > 0 && args[0] != null)
+        {
+            worldDescriptor = args[0];
+        }
+        
         return worldDescriptor;
     }
 
@@ -242,6 +254,6 @@ public class Main implements FrameProcessor
 
     public static void main(String[] args)
     {
-        new Main();
+        Main m = new Main(args);
     }
 }
