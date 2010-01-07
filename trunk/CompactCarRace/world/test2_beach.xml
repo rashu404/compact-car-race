@@ -124,7 +124,7 @@
 			<position x="-10000" y="0" z="-10000" />
 			<scale x="20000" y="1" z="20000" />
 			<texture src="world/data/textures/water1.jpg" x="100" z="100" />
-			<transparency visible="0.4" />
+			<transparency visible="0" />
 			<lift value="0.4" step="0.0003" />
 			<sink value="0.1" />
 		</terrain>
