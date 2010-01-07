@@ -12,4 +12,4 @@ set classp=%classp%;./lib/jdom.jar
 set classp=%classp%;./lib/ms3dloader.jar
 set classp=%classp%;./lib/mysqlconnector.jar
 
-java -classpath %classp% %mainclass% world/test1_windengine.xml
+java -classpath %classp% %mainclass% world/test2_beach.xml
