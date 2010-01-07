@@ -225,8 +225,8 @@ public class Terrain extends BranchGroup
             Point3f pointC = points[indexC];
             Point3f pointD = points[indexD];
 
-            float x = xPosition - (pointA.getX() + xMove);
-            float z = zPosition - (pointA.getZ() + zMove);
+            float x = xPosition - (pointA.x + xMove);
+            float z = zPosition - (pointA.z + zMove);
 
             if (x >= 0 && z >= 0)
             {
@@ -234,13 +234,13 @@ public class Terrain extends BranchGroup
                 if (x == 0)
                     x = Float.MIN_VALUE;
 
-                if ((z / x) <= (pointC.getZ() - pointA.getZ()) / (pointC.getX() - pointA.getX()))
+                if ((z / x) <= (pointC.z - pointA.z) / (pointC.x - pointA.x))
                 {
-                    y = (((pointC.getY() - pointA.getY()) / (pointC.getX() - pointA.getX()) * x + pointA.getY()) - ((pointB.getY() - pointA.getY()) / (pointB.getX() - pointA.getX()) * x + pointA.getY())) / ((pointC.getZ() - pointA.getZ()) / (pointC.getX() - pointA.getX()) * x) * z + (pointB.getY() - pointA.getY()) / (pointB.getX() - pointA.getX()) * x + pointA.getY();
+                    y = (((pointC.y - pointA.y) / (pointC.x - pointA.x) * x + pointA.y) - ((pointB.y - pointA.y) / (pointB.x - pointA.x) * x + pointA.y)) / ((pointC.z - pointA.z) / (pointC.x - pointA.x) * x) * z + (pointB.y - pointA.y) / (pointB.x - pointA.x) * x + pointA.y;
                 }
                 else
                 {
-                    y = (((pointC.getY() - pointA.getY()) / (pointC.getX() - pointA.getX()) * x + pointA.getY()) - ((pointD.getY() - pointC.getY()) / (pointD.getX() - pointC.getX()) * x + pointA.getY())) / ((pointC.getZ() - pointA.getZ()) / (pointC.getX() - pointA.getX()) * x) * z + (pointD.getY() - pointC.getY()) / (pointD.getX() - pointC.getX()) * x + pointA.getY();
+                    y = (((pointC.y - pointA.y) / (pointC.x - pointA.x) * x + pointA.y) - ((pointD.y - pointC.y) / (pointD.x - pointC.x) * x + pointA.y)) / ((pointC.z - pointA.z) / (pointC.x - pointA.x) * x) * z + (pointD.y - pointC.y) / (pointD.x - pointC.x) * x + pointA.y;
                 }
             }
         }
