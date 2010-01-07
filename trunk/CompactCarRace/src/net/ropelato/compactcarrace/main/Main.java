@@ -223,7 +223,7 @@ public class Main implements FrameProcessor
             delay = 0;
         }
         Util.delay(delay);
-        System.out.println(averageFPS+" "+delay);
+        //System.out.println(averageFPS+" "+delay);
         //System.out.println(myCar.getPositionX()+" "+myCar.getPositionY()+" "+myCar.getPositionZ());
     }
     
